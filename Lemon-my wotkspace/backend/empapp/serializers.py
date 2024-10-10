@@ -22,21 +22,26 @@ class UserLoginSerializer(serializers.Serializer):
 
 # Expense serializer
 class ExpenseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Expense
-        fields = [
-            "id",
-            "employee",  # Change to employee since your Expense model references Employee
-            "amount",
-            "description",
-            "date"
-        ]
+        class Meta:
+            model = Expense
+            fields = [
+                "id",  # Assuming you want to return the ID of the created expense
+                "amount",
+                "description",
+                "date"
+            ]
+            read_only_fields = ['employee']  # Set employee as read-only since it will be set automatically
 
-    def create(self, validated_data):
-        employee = self.context['request'].user.employee  # Get the logged-in employee
-        validated_data['employee'] = employee  # Set the employee field
-        expense = Expense.objects.create(**validated_data)
-        return expense
+        def create(self, validated_data):
+            # Retrieve the logged-in employee instance
+            employee = self.context['request'].user.employee  
+            
+            # Assign the employee to validated data
+            validated_data['employee'] = employee  
+            
+            # Create and return the new Expense instance
+            expense = Expense.objects.create(**validated_data)
+            return expense
 
 # Timesheet serializer
 class TimesheetSerializer(serializers.ModelSerializer):

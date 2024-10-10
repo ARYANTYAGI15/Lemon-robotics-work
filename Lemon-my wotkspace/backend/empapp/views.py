@@ -36,4 +36,3 @@ class TimesheetViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         employee = get_object_or_404(Employee, user=self.request.user)
         serializer.save(employee=employee)
-

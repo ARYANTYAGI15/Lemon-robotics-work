@@ -21,6 +21,6 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('empapp/', include('empapp.urls')) # your app's API
+    path('empapp/', include('empapp.urls')), # your app's API
 ]
 

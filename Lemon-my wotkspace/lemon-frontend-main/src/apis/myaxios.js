@@ -1,87 +1,61 @@
-// src/myaxios.js
 import axios from "axios";
 
-// Create an axios instance
+// Create an Axios instance with the base URL
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/", // Your API base URL
-  timeout: 1000, // Optional: set a timeout for requests
+  baseURL: "http://127.0.0.1:8000/hr/",  // Your API base URL
+  timeout: 5000,  // Optional: set a timeout for requests (in milliseconds)
 });
 
-// Function to retrieve tokens from localStorage
-const getAccessToken = () => localStorage.getItem("accessToken");
-const getRefreshToken = () => localStorage.getItem("refreshToken");
-
-// Function to set tokens in localStorage
-const setTokens = (accessToken, refreshToken) => {
-  localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("refreshToken", refreshToken);
-};
-
-// Function to remove tokens from localStorage
-const removeTokens = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-};
-
-// Function to refresh access token
-const refreshAccessToken = async () => {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) {
-    removeTokens(); // No refresh token, clear storage
-    throw new Error("No refresh token available");
-  }
-
-  try {
-    const response = await axios.post("http://127.0.0.1:8000/api/token/refresh/", {
-      refresh: refreshToken,
-    });
-    const { access } = response.data;
-    setTokens(access, refreshToken); // Store new access token
-    return access; // Return new access token
-  } catch (error) {
-    removeTokens(); // On error, clear tokens
-    throw new Error("Failed to refresh access token");
-  }
-};
-
-// Add an interceptor for requests
+// Add a request interceptor to include the access token in the request headers
 api.interceptors.request.use(
-  async (config) => {
-    const token = getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  (config) => {
+    const accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add an interceptor for responses
+// Add a response interceptor to handle token refresh when a 401 Unauthorized occurs
 api.interceptors.response.use(
-  (response) => response,
+  (response) => response,  // If the response is successful, just return it
   async (error) => {
     const originalRequest = error.config;
 
-    // If the error is a 401 Unauthorized, attempt to refresh token
+    // Check if the error is due to an expired token (401 Unauthorized)
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Mark the request as retried
-      try {
-        const newAccessToken = await refreshAccessToken(); // Refresh token
-        api.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest); // Retry the original request
-      } catch (refreshError) {
-        // Handle error refreshing token
-        console.error(refreshError);
-        removeTokens(); // Clear tokens on failure
-        return Promise.reject(refreshError);
+      originalRequest._retry = true;  // Mark the request as retried
+
+      // Get the refresh token from localStorage
+      const refreshToken = localStorage.getItem("refresh_token");
+      if (refreshToken) {
+        try {
+          // Send a request to refresh the access token
+          const response = await axios.post("http://127.0.0.1:8000/auth/jwt/refresh/", {
+            refresh: refreshToken,
+          });
+
+          // Store the new access token in localStorage
+          const newAccessToken = response.data.access;
+          localStorage.setItem("access_token", newAccessToken);
+
+          // Update the original request's authorization header and retry the request
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return api(originalRequest);
+        } catch (refreshError) {
+          console.error("Unable to refresh access token:", refreshError);
+          // Optionally, redirect to login or logout the user
+          window.location.href = "/login";
+          return Promise.reject(refreshError);
+        }
       }
     }
+
+    // If the error is not due to token expiration or refresh fails, just reject it
     return Promise.reject(error);
   }
 );
 
-// Export the api and token functions
-export { api, setTokens, removeTokens };
+export default api;

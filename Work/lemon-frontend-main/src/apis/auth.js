@@ -15,7 +15,11 @@ export async function userlogin(email, password) {
     axios.defaults.headers.common[
       "Authorization"
     ] = `JWT ${response.data.access}`;
+<<<<<<< Updated upstream
     window.location.href = "/employee";
+=======
+    window.location.href = "/about";
+>>>>>>> Stashed changes
   } catch (error) {
     console.log(error);
     {

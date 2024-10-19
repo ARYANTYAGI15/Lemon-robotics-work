@@ -8,10 +8,10 @@ const EmployeeCardPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/hr/employees/me/") 
+      .get("http://127.0.0.1:8000/hr/employees/me/")
       .then((response) => {
         setEmployee(response.data);
-        console.log(response.data)
+        console.log(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -43,7 +43,7 @@ const EmployeeCardPage = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",  // Vertically centers the content
+        minHeight: "100vh", // Vertically centers the content
         backgroundColor: "#f4f4f9",
         padding: "20px",
       }}
@@ -51,10 +51,18 @@ const EmployeeCardPage = () => {
       <h1 style={{ textAlign: "center" }}>Employee Details</h1>
       <div style={styles.card}>
         <h2>{employee.name}</h2>
-        <p><strong>Email:</strong> {employee.email}</p>
-        <p><strong>Position:</strong> {employee.position}</p>
-        <p><strong>Department:</strong> {employee.department}</p>
-        <p><strong>Phone:</strong> {employee.phone}</p>
+        <p>
+          <strong>Email:</strong> {employee.email}
+        </p>
+        <p>
+          <strong>Position:</strong> {employee.position}
+        </p>
+        <p>
+          <strong>Department:</strong> {employee.department}
+        </p>
+        <p>
+          <strong>Phone:</strong> {employee.phone}
+        </p>
         {/* Add any other employee details you want to display */}
       </div>
     </div>

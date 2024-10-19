@@ -12,7 +12,7 @@ import {
   Login,
   ExpenseSheet,
   TimeSheet,
-  EmployeeCard,
+  EmployeeCardFetch,
 } from "./pages";
 
 function App() {
@@ -38,14 +38,17 @@ function App() {
         <Route path="/services" element={<AllServicePage />} />
         <Route path="/services/virtualcom" element={<VirtualCommission />} />
         <Route path="/services/softwaretest" element={<SoftwareTesting />} />
-        
+
         {/* Public route for login */}
-        <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+        <Route
+          path="/login"
+          element={<Login onLoginSuccess={handleLoginSuccess} />}
+        />
 
         {/* Protected routes */}
-        <Route path="/employee" element={<EmployeeCard/>} />
-        <Route path="/expense-sheet" element={<ExpenseSheet/>} />
-        <Route path="/time-sheet" element={<TimeSheet/>}/>
+        <Route path="/employee" element={<EmployeeCardFetch />} />
+        <Route path="/expense-sheet" element={<ExpenseSheet />} />
+        <Route path="/time-sheet" element={<TimeSheet />} />
       </Routes>
       <Footer />
     </BrowserRouter>

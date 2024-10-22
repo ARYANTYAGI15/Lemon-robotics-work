@@ -1,28 +1,48 @@
-// src/pages/TimeSheet/TimeSheet.jsx
-
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Paper,
-  Grid,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Button, TextField, Typography, Paper, Grid } from "@mui/material";
+import { submitWorkingHours, getEmployeeWorkingHours } from "../../apis/TimeSheetapi"; // Import API methods
 
 const TimeSheet = () => {
   const [hours, setHours] = useState("");
   const [date, setDate] = useState("");
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
 
-  const handleSubmit = (e) => {
+  // Fetch the timesheet history on component mount
+  useEffect(() => {
+    const fetchTimeSheetHistory = async () => {
+      try {
+        const history = await getEmployeeWorkingHours(); // Fetch from API
+        console.log("Fetched timesheet history:", history); // Log the response
+        
+        // Check if the response is an array
+        if (Array.isArray(history)) {
+          setTimeSheetHistory(history); // Set the state if valid
+        } else {
+          console.error("Received non-array data:", history);
+          setTimeSheetHistory([]); // Reset to empty array if not valid
+        }
+      } catch (error) {
+        console.error("Error fetching time sheet history:", error);
+      }
+    };
+
+    fetchTimeSheetHistory();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (hours && date) {
-      const newEntry = { hours, date };
-      setTimeSheetHistory([...timeSheetHistory, newEntry]);
-      setHours("");
-      setDate("");
-      console.log("Time sheet submitted:", newEntry);
+      try {
+        // Submit new time sheet entry to the API
+        const newEntry = await submitWorkingHours(hours, date);
+        // Update local state with the new entry
+        setTimeSheetHistory((prev) => [...prev, newEntry]); // Use functional update
+        setHours("");
+        setDate("");
+        console.log("Time sheet submitted:", newEntry);
+      } catch (error) {
+        console.error("Error submitting time sheet:", error);
+      }
     }
   };
 
@@ -38,7 +58,7 @@ const TimeSheet = () => {
         backgroundColor: "#e0f7fa", // Light background color
       }}
     >
-      <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, width: '90%', maxWidth: 600, backgroundColor: "#ffffff" }}>
+      <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, width: "90%", maxWidth: 600, backgroundColor: "#ffffff" }}>
         <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
           Log Time Sheet
         </Typography>
@@ -98,7 +118,7 @@ const TimeSheet = () => {
             {timeSheetHistory.map((entry, index) => (
               <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
                 <Typography variant="body1">
-                  <strong>Hours:</strong> {entry.hours} <br />
+                  <strong>Hours:</strong> {entry.working_hours} <br />
                   <strong>Date:</strong> {entry.date}
                 </Typography>
               </Paper>

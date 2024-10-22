@@ -135,6 +135,7 @@ class EmployeeLeaveViewSet(ModelViewSet):
 
         return response
 from rest_framework import viewsets
+from rest_framework import status
 class EmployeeExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeExpenseSerializer
     permission_classes = [IsAuthenticated]
@@ -150,28 +151,38 @@ class EmployeeExpenseViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        # Add the employee ID to the context
         if self.request.user.is_authenticated:
             context["employee_id"] = Employee.objects.get(user=self.request.user).id
         return context
 
     def perform_create(self, serializer):
-        # Call the create method of the serializer
-        serializer.save()
-    
-    @action(detail=False, methods=['get'], url_path='me')
+        # Link the expense to the employee
+        employee = Employee.objects.get(user=self.request.user)
+        serializer.save(employee=employee)
+
+    @action(detail=False, methods=['get', 'post'], url_path='me')
     def me(self, request):
         try:
             # Get the employee instance associated with the logged-in user
             employee = Employee.objects.get(user_id=request.user.id)
-            expenses = EmployeeExpense.objects.filter(employee=employee)
 
-            # Serialize and return the expenses
-            serializer = self.get_serializer(expenses, many=True)
-            return Response(serializer.data)
+            if request.method == 'GET':
+                # Retrieve expenses for the employee
+                expenses = EmployeeExpense.objects.filter(employee=employee)
+                serializer = self.get_serializer(expenses, many=True)
+                return Response(serializer.data)
+
+            elif request.method == 'POST':
+                # Create a new expense for the employee
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+
+                # Save the expense and associate it with the employee
+                serializer.save(employee=employee)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except Employee.DoesNotExist:
-            return Response({"error": "Employee not found."}, status=404)
+            return Response({"error": "Employee not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 

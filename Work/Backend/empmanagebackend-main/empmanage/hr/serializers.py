@@ -224,13 +224,27 @@ class EmployeeTimesheetSerializer(serializers.ModelSerializer):
         model = EmployeeTimesheet
         fields = [
             "id",
-            "employee",  # Change to employee since your Timesheet model references Employee
             "work_date",  # Ensure the field matches your model
             "hours_worked",  # Correct to hours_worked since that's the model field
         ]
+        read_only_fields = ["employee"]  # Employee will be set automatically
 
     def create(self, validated_data):
-        employee = self.context["request"].user.employee  # Get the logged-in employee
-        validated_data["employee"] = employee  # Set the employee field
+        # Retrieve the employee_id from the serializer context
+        employee_id = self.context.get("employee_id")
+        
+        if not employee_id:
+            raise serializers.ValidationError("Employee ID cannot be null.")
+
+        # Ensure employee exists
+        try:
+            employee = Employee.objects.get(id=employee_id)
+        except Employee.DoesNotExist:
+            raise serializers.ValidationError("Employee not found.")
+
+        # Assign the employee to validated data
+        validated_data["employee"] = employee
+
+        # Create and return the new Timesheet instance
         timesheet = EmployeeTimesheet.objects.create(**validated_data)
         return timesheet

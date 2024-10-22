@@ -186,7 +186,7 @@ class EmployeeExpenseViewSet(viewsets.ModelViewSet):
 
 
 
-class EmployeeTimesheetViewSet(ModelViewSet):
+class EmployeeTimesheetViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete", "head", "options"]
     serializer_class = EmployeeTimesheetSerializer
     pagination_class = DefaultPagination
@@ -208,3 +208,27 @@ class EmployeeTimesheetViewSet(ModelViewSet):
         user = self.request.user
         self.employee = Employee.objects.select_related("user").get(user_id=user.id)
         return {"employee_id": self.employee.id}
+
+    @action(detail=False, methods=['get', 'post'], url_path='me')
+    def me(self, request):
+        try:
+            # Get the employee instance associated with the logged-in user
+            employee = Employee.objects.get(user_id=request.user.id)
+
+            if request.method == 'GET':
+                # Retrieve timesheets for the employee
+                timesheets = EmployeeTimesheet.objects.filter(employee=employee)
+                serializer = self.get_serializer(timesheets, many=True)
+                return Response(serializer.data)
+
+            elif request.method == 'POST':
+                # Create a new timesheet entry for the employee
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+
+                # Save the timesheet and associate it with the employee
+                serializer.save(employee=employee)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Employee.DoesNotExist:
+            return Response({"error": "Employee not found."}, status=status.HTTP_404_NOT_FOUND)

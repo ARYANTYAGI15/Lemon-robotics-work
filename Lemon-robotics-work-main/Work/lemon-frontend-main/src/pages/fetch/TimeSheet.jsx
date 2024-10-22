@@ -6,6 +6,7 @@ const TimeSheet = () => {
   const [hours, setHours] = useState("");
   const [date, setDate] = useState("");
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false); // State to manage visibility of time sheet history
 
   // Fetch the timesheet history on component mount
   useEffect(() => {
@@ -34,7 +35,7 @@ const TimeSheet = () => {
     if (hours && date) {
       try {
         // Submit new time sheet entry to the API
-        const newEntry = await submitWorkingHours(hours, date);
+        const newEntry = await submitWorkingHours(hours); // Adjusted to just send hours
         // Update local state with the new entry
         setTimeSheetHistory((prev) => [...prev, newEntry]); // Use functional update
         setHours("");
@@ -44,6 +45,10 @@ const TimeSheet = () => {
         console.error("Error submitting time sheet:", error);
       }
     }
+  };
+
+  const toggleHistory = () => {
+    setShowHistory((prev) => !prev); // Toggle the history visibility
   };
 
   return (
@@ -105,25 +110,38 @@ const TimeSheet = () => {
           </Grid>
         </form>
 
-        <Typography variant="h5" sx={{ mt: 4, mb: 2, textAlign: "center", color: "#1976d2" }}>
-          Time Sheet History
-        </Typography>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={toggleHistory}
+          sx={{ mt: 3 }}
+        >
+          {showHistory ? "Hide Time Sheet History" : "Show Time Sheet History"}
+        </Button>
 
-        {timeSheetHistory.length === 0 ? (
-          <Typography variant="body1" sx={{ textAlign: "center", color: "#555" }}>
-            No time sheets recorded yet.
-          </Typography>
-        ) : (
-          <Box sx={{ mt: 2 }}>
-            {timeSheetHistory.map((entry, index) => (
-              <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
-                <Typography variant="body1">
-                  <strong>Hours:</strong> {entry.working_hours} <br />
-                  <strong>Date:</strong> {entry.date}
-                </Typography>
-              </Paper>
-            ))}
-          </Box>
+        {showHistory && ( // Render history only when showHistory is true
+          <>
+            <Typography variant="h5" sx={{ mt: 4, mb: 2, textAlign: "center", color: "#1976d2" }}>
+              Time Sheet History
+            </Typography>
+
+            {timeSheetHistory.length === 0 ? (
+              <Typography variant="body1" sx={{ textAlign: "center", color: "#555" }}>
+                No time sheets recorded yet.
+              </Typography>
+            ) : (
+              <Box sx={{ mt: 2 }}>
+                {timeSheetHistory.map((entry, index) => (
+                  <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
+                    <Typography variant="body1">
+                      <strong>Hours:</strong> {entry.hours_worked} <br /> {/* Adjusted to correct property */}
+                      <strong>Date:</strong> {entry.work_date} {/* Adjusted to correct property */}
+                    </Typography>
+                  </Paper>
+                ))}
+              </Box>
+            )}
+          </>
         )}
       </Paper>
     </Box>

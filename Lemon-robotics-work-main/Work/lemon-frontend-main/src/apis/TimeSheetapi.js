@@ -1,4 +1,3 @@
-// src/apis/TimeSheetapi.js
 import api from "./myaxios"; // Import your axios instance
 
 // Get the employee's working hours log
@@ -16,12 +15,12 @@ export const getEmployeeWorkingHours = async () => {
 export const submitWorkingHours = async (working_hours) => {
   try {
     // Get the current date in YYYY-MM-DD format
-    const date = new Date().toISOString().split("T")[0];
+    const work_date = new Date().toISOString().split("T")[0]; // Renamed to work_date for consistency
 
     // Submit the working hours log with the current date
     const response = await api.post("hr/timesheets/me/", {  // Corrected endpoint
-      working_hours,
-      date,  // Automatically include the current date
+      work_date,         // Use work_date instead of date
+      hours_worked: working_hours, // Use hours_worked instead of working_hours
     });
 
     return response.data;

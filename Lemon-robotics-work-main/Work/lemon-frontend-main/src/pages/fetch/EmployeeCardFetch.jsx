@@ -36,7 +36,7 @@ const EmployeecardFetch = () => {
       <h2>{user?.map((u) => u.first_name)}</h2>
       <EmployeeCardRender
         name={user?.map((u) => u.first_name)}
-        empid={user?.[0].user_id}
+        empid={user?.[0].empid}
         phone={user?.[0].phone}
         designation={user?.[0].designation}
         department={user?.[0].department}

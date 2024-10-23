@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography, Paper, Grid } from "@mui/material";
-import { submitWorkingHours, getEmployeeWorkingHours } from "../../apis/TimeSheetapi"; // Import API methods
+import { Link } from "react-router-dom"; // Import Link from React Router
+import { submitWorkingHours, getEmployeeWorkingHours } from "../../apis/TimeSheetapi";
 
 const TimeSheet = () => {
   const [hours, setHours] = useState("");
   const [date, setDate] = useState("");
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
-  const [showHistory, setShowHistory] = useState(false); // State to manage visibility of time sheet history
+  const [showHistory, setShowHistory] = useState(false);
 
-  // Fetch the timesheet history on component mount
   useEffect(() => {
     const fetchTimeSheetHistory = async () => {
       try {
-        const history = await getEmployeeWorkingHours(); // Fetch from API
-        console.log("Fetched timesheet history:", history); // Log the response
-        
-        // Check if the response is an array
+        const history = await getEmployeeWorkingHours();
         if (Array.isArray(history)) {
-          setTimeSheetHistory(history); // Set the state if valid
+          setTimeSheetHistory(history);
         } else {
           console.error("Received non-array data:", history);
-          setTimeSheetHistory([]); // Reset to empty array if not valid
+          setTimeSheetHistory([]);
         }
       } catch (error) {
         console.error("Error fetching time sheet history:", error);
@@ -34,13 +31,10 @@ const TimeSheet = () => {
     e.preventDefault();
     if (hours && date) {
       try {
-        // Submit new time sheet entry to the API
-        const newEntry = await submitWorkingHours(hours); // Adjusted to just send hours
-        // Update local state with the new entry
-        setTimeSheetHistory((prev) => [...prev, newEntry]); // Use functional update
+        const newEntry = await submitWorkingHours(hours);
+        setTimeSheetHistory((prev) => [...prev, newEntry]);
         setHours("");
         setDate("");
-        console.log("Time sheet submitted:", newEntry);
       } catch (error) {
         console.error("Error submitting time sheet:", error);
       }
@@ -48,7 +42,7 @@ const TimeSheet = () => {
   };
 
   const toggleHistory = () => {
-    setShowHistory((prev) => !prev); // Toggle the history visibility
+    setShowHistory((prev) => !prev);
   };
 
   return (
@@ -60,7 +54,7 @@ const TimeSheet = () => {
         justifyContent: "center",
         height: "100vh",
         padding: 2,
-        backgroundColor: "#e0f7fa", // Light background color
+        backgroundColor: "#e0f7fa",
       }}
     >
       <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, width: "90%", maxWidth: 600, backgroundColor: "#ffffff" }}>
@@ -100,7 +94,7 @@ const TimeSheet = () => {
                 sx={{
                   height: "56px",
                   "&:hover": {
-                    backgroundColor: "#004ba0", // Darker shade on hover
+                    backgroundColor: "#004ba0",
                   },
                 }}
               >
@@ -119,7 +113,7 @@ const TimeSheet = () => {
           {showHistory ? "Hide Time Sheet History" : "Show Time Sheet History"}
         </Button>
 
-        {showHistory && ( // Render history only when showHistory is true
+        {showHistory && (
           <>
             <Typography variant="h5" sx={{ mt: 4, mb: 2, textAlign: "center", color: "#1976d2" }}>
               Time Sheet History
@@ -134,8 +128,8 @@ const TimeSheet = () => {
                 {timeSheetHistory.map((entry, index) => (
                   <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
                     <Typography variant="body1">
-                      <strong>Hours:</strong> {entry.hours_worked} <br /> {/* Adjusted to correct property */}
-                      <strong>Date:</strong> {entry.work_date} {/* Adjusted to correct property */}
+                      <strong>Hours:</strong> {entry.hours_worked} <br />
+                      <strong>Date:</strong> {entry.work_date}
                     </Typography>
                   </Paper>
                 ))}
@@ -143,6 +137,16 @@ const TimeSheet = () => {
             )}
           </>
         )}
+
+        {/* Navigation Buttons */}
+        <Box sx={{ mt: 3, display: "flex", justifyContent: "space-around" }}>
+          <Button variant="contained" color="primary" component={Link} to="/expense-sheet">
+            Go to Expense Sheet
+          </Button>
+          <Button variant="contained" color="secondary" component={Link} to="/employee">
+            Go to Employee Card
+          </Button>
+        </Box>
       </Paper>
     </Box>
   );

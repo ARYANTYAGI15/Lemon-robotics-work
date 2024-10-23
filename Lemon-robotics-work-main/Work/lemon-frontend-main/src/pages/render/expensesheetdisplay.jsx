@@ -158,8 +158,8 @@ const ExpenseSheetDisplay = ({
               No expenses recorded yet.
             </Typography>
           ) : (
-            <Box sx={{ mt: 2, maxHeight: "300px", overflowY: "auto" }}>
-              {expenseHistory.slice(0, 5).map((item, index) => (
+            <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
+              {expenseHistory.map((item, index) => (
                 <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
                   <Typography variant="body1">
                     <strong>Amount:</strong> ${item.amount} <br />
@@ -167,19 +167,6 @@ const ExpenseSheetDisplay = ({
                   </Typography>
                 </Paper>
               ))}
-
-              {expenseHistory.length > 5 && (
-                <Box sx={{ maxHeight: "150px", overflowY: "auto" }}>
-                  {expenseHistory.slice(5).map((item, index) => (
-                    <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
-                      <Typography variant="body1">
-                        <strong>Amount:</strong> ${item.amount} <br />
-                        <strong>Description:</strong> {item.description}
-                      </Typography>
-                    </Paper>
-                  ))}
-                </Box>
-              )}
             </Box>
           )}
         </Paper>

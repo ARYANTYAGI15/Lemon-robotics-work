@@ -10,7 +10,7 @@ import {
   VirtualCommission,
   SoftwareTesting,
   Login,
-  ExpenseSheet,
+  ExpenseSheetFetch,
   TimeSheet,
   EmployeeCardFetch,
 } from "./pages";
@@ -47,7 +47,7 @@ function App() {
 
         {/* Protected routes */}
         <Route path="/employee" element={<EmployeeCardFetch />} />
-        <Route path="/expense-sheet" element={<ExpenseSheet />} />
+        <Route path="/expense-sheet" element={<ExpenseSheetFetch />} />
         <Route path="/time-sheet" element={<TimeSheet />} />
       </Routes>
       <Footer />

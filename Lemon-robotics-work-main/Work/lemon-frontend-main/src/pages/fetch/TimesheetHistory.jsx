@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, TextField, Button, Grid } from "@mui/material";
-import { submitWorkingHours, getEmployeeWorkingHours } from "../../apis/TimeSheetapi"; // Import API methods
+import {
+  submitWorkingHours,
+  getEmployeeWorkingHours,
+} from "../../apis/TimeSheetapi"; // Import API methods
 
 const TimeSheetHistory = () => {
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
@@ -57,8 +60,20 @@ const TimeSheetHistory = () => {
         backgroundColor: "#e0f7fa", // Light background color
       }}
     >
-      <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, width: '90%', maxWidth: 600, backgroundColor: "#ffffff" }}>
-        <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 4,
+          borderRadius: 2,
+          width: "90%",
+          maxWidth: 600,
+          backgroundColor: "#ffffff",
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+        >
           My Time Sheet History
         </Typography>
 
@@ -106,23 +121,36 @@ const TimeSheetHistory = () => {
         </form>
 
         {error && (
-          <Typography variant="body1" sx={{ textAlign: "center", color: "red", mt: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", color: "red", mt: 2 }}
+          >
             {error}
           </Typography>
         )}
 
         {loading ? (
-          <Typography variant="body1" sx={{ textAlign: "center", color: "#555", mt: 4 }}>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", color: "#555", mt: 4 }}
+          >
             Loading timesheet history...
           </Typography>
         ) : timeSheetHistory.length === 0 ? (
-          <Typography variant="body1" sx={{ textAlign: "center", color: "#555", mt: 4 }}>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", color: "#555", mt: 4 }}
+          >
             No time sheets recorded yet.
           </Typography>
         ) : (
           <Box sx={{ mt: 4 }}>
             {timeSheetHistory.map((entry, index) => (
-              <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
+              <Paper
+                key={index}
+                elevation={1}
+                sx={{ padding: 1, margin: 1, borderRadius: 2 }}
+              >
                 <Typography variant="body1">
                   <strong>Hours:</strong> {entry.working_hours} <br />
                   <strong>Date:</strong> {entry.date}

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography, Paper, Grid } from "@mui/material";
 import { Link } from "react-router-dom"; // Import Link from React Router
-import { submitWorkingHours, getEmployeeWorkingHours } from "../../apis/TimeSheetapi";
+import {
+  submitWorkingHours,
+  getEmployeeWorkingHours,
+} from "../../apis/TimeSheetapi";
 
 const TimeSheet = () => {
   const [hours, setHours] = useState("");
@@ -58,11 +61,17 @@ const TimeSheet = () => {
       }}
     >
       {/* Grid Container for form and history */}
-      <Grid container spacing={2} sx={{ width: '100%' }}>
+      <Grid container spacing={2} sx={{ width: "100%" }}>
         {/* Left side - Form */}
         <Grid item xs={6}>
-          <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, backgroundColor: "#ffffff" }}>
-            <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
+          <Paper
+            elevation={3}
+            sx={{ padding: 4, borderRadius: 2, backgroundColor: "#ffffff" }}
+          >
+            <Typography
+              variant="h4"
+              sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+            >
               Log Time Sheet
             </Typography>
             <form onSubmit={handleSubmit}>
@@ -109,11 +118,23 @@ const TimeSheet = () => {
             </form>
 
             {/* Navigation Buttons */}
-            <Box sx={{ mt: 3, display: "flex", justifyContent: "space-around" }}>
-              <Button variant="contained" color="primary" component={Link} to="/expense-sheet">
+            <Box
+              sx={{ mt: 3, display: "flex", justifyContent: "space-around" }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/expense-sheet"
+              >
                 Go to Expense Sheet
               </Button>
-              <Button variant="contained" color="secondary" component={Link} to="/employee">
+              <Button
+                variant="contained"
+                color="secondary"
+                component={Link}
+                to="/employee"
+              >
                 Go to Employee Card
               </Button>
             </Box>
@@ -122,27 +143,45 @@ const TimeSheet = () => {
 
         {/* Right side - Time Sheet History */}
         <Grid item xs={6}>
-          <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, backgroundColor: "#ffffff", height: '100%' }}>
-            <Typography variant="h5" sx={{ textAlign: "center", color: "#1976d2" }}>
+          <Paper
+            elevation={3}
+            sx={{
+              padding: 4,
+              borderRadius: 2,
+              backgroundColor: "#ffffff",
+              height: "100%",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{ textAlign: "center", color: "#1976d2" }}
+            >
               Time Sheet History
             </Typography>
 
             <Box
               sx={{
                 mt: 2,
-                maxHeight: "75vh",  // Limiting height for scroll
+                maxHeight: "75vh", // Limiting height for scroll
                 overflowY: "auto",
-                paddingRight: 2,    // Adding padding for better scroll experience
+                paddingRight: 2, // Adding padding for better scroll experience
               }}
             >
               {timeSheetHistory.length === 0 ? (
-                <Typography variant="body1" sx={{ textAlign: "center", color: "#555" }}>
+                <Typography
+                  variant="body1"
+                  sx={{ textAlign: "center", color: "#555" }}
+                >
                   No time sheets recorded yet.
                 </Typography>
               ) : (
                 <>
                   {timeSheetHistory.map((entry, index) => (
-                    <Paper key={index} elevation={1} sx={{ padding: 2, margin: 1, borderRadius: 2 }}>
+                    <Paper
+                      key={index}
+                      elevation={1}
+                      sx={{ padding: 2, margin: 1, borderRadius: 2 }}
+                    >
                       <Typography variant="body1">
                         <strong>Hours:</strong> {entry.hours_worked} <br />
                         <strong>Date:</strong> {entry.work_date}

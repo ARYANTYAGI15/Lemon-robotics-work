@@ -4,7 +4,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import { Grid, Card, CardContent, Typography, Box, Button } from "@mui/material";
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Button,
+} from "@mui/material";
 import Work from "@mui/icons-material/Work";
 import { Badge, Business, PhoneAndroid } from "@mui/icons-material";
 import { Link } from "react-router-dom"; // Import Link for navigation
@@ -66,13 +73,18 @@ const GridItem = ({ primarytext, img }) => {
   );
 };
 
-const EmployeeCardRender = ({ name, empid, phone, designation, department }) => {
+const EmployeeCardRender = ({
+  name,
+  empid,
+  phone,
+  designation,
+  department,
+}) => {
   return (
     <Box
       sx={{
         padding: "40px",
-        background:
-          "linear-gradient(to bottom right, #f1f2b5, #135058)", // Soft yellow-green gradient
+        background: "linear-gradient(to bottom right, #f1f2b5, #135058)", // Soft yellow-green gradient
         minHeight: "100vh", // Cover full viewport height
         display: "flex",
         justifyContent: "center",
@@ -100,8 +112,7 @@ const EmployeeCardRender = ({ name, empid, phone, designation, department }) => 
           sx={{
             padding: "50px", // Larger padding for breathing space
             position: "relative",
-            background:
-              "linear-gradient(135deg, #e0f7fa 10%, #ffffff 90%)", // Fresh, clean gradient inside card
+            background: "linear-gradient(135deg, #e0f7fa 10%, #ffffff 90%)", // Fresh, clean gradient inside card
           }}
         >
           <Typography
@@ -160,7 +171,7 @@ const EmployeeCardRender = ({ name, empid, phone, designation, department }) => 
           >
             <Button
               component={Link}
-              to="/time-sheet"
+              to="/hr/time-sheet"
               variant="contained"
               color="primary"
               sx={{
@@ -174,7 +185,7 @@ const EmployeeCardRender = ({ name, empid, phone, designation, department }) => 
             </Button>
             <Button
               component={Link}
-              to="/expense-sheet"
+              to="/hr/expense-sheet"
               variant="outlined"
               color="primary"
               sx={{

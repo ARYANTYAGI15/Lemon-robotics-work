@@ -125,7 +125,7 @@ const TimeSheet = () => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to="/expense-sheet"
+                to="/hr/expense-sheet"
               >
                 Go to Expense Sheet
               </Button>
@@ -133,7 +133,7 @@ const TimeSheet = () => {
                 variant="contained"
                 color="secondary"
                 component={Link}
-                to="/employee"
+                to="/hr/employee"
               >
                 Go to Employee Card
               </Button>

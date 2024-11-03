@@ -30,7 +30,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header isAuthenticated={isAuthenticated} />
+      {/* <Header isAuthenticated={isAuthenticated} /> */}
+      {window.location.pathname.startsWith("/hr") ? (
+        <h1>Seperate SideNavbar</h1>
+      ) : (
+        <Header isAuthenticated={isAuthenticated} />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -46,9 +51,9 @@ function App() {
         />
 
         {/* Protected routes */}
-        <Route path="/employee" element={<EmployeeCardFetch />} />
-        <Route path="/expense-sheet" element={<ExpenseSheetFetch />} />
-        <Route path="/time-sheet" element={<TimeSheet />} />
+        <Route path="/hr/employee" element={<EmployeeCardFetch />} />
+        <Route path="/hr/expense-sheet" element={<ExpenseSheetFetch />} />
+        <Route path="/hr/time-sheet" element={<TimeSheet />} />
       </Routes>
       <Footer />
     </BrowserRouter>

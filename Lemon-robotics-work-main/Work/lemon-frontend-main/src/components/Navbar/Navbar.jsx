@@ -34,8 +34,8 @@ const Navbar = ({ isAuthenticated }) => {
   // Add conditional pages based on isAuthenticated state
   if (isAuthenticated) {
     pages.push(
-      { title: "Expense Sheet", link: "/expense-sheet" },
-      { title: "Time Sheet", link: "/time-sheet" }
+      { title: "Expense Sheet", link: "/hr/expense-sheet" },
+      { title: "Time Sheet", link: "/hr/time-sheet" }
     );
   } else {
     // For unauthenticated users, display the "For Employees" option

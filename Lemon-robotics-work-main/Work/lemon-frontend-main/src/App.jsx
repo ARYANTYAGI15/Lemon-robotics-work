@@ -14,6 +14,7 @@ import {
   TimeSheet,
   EmployeeCardFetch,
 } from "./pages";
+import SideNav from "./components/SideNav/SideNav";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
@@ -32,7 +33,7 @@ function App() {
     <BrowserRouter>
       {/* <Header isAuthenticated={isAuthenticated} /> */}
       {window.location.pathname.startsWith("/hr") ? (
-        <h1>Seperate SideNavbar</h1>
+        <SideNav />
       ) : (
         <Header isAuthenticated={isAuthenticated} />
       )}

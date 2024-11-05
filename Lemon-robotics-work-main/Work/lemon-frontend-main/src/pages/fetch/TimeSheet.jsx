@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography, Paper, Grid } from "@mui/material";
-import { Link } from "react-router-dom"; // Import Link from React Router
 import { submitWorkingHours, getEmployeeWorkingHours } from "../../apis/TimeSheetapi";
 import TimeSheetHistory from "../render/TimesheetHistory";
+
 const TimeSheet = () => {
   const [hours, setHours] = useState("");
   const [date, setDate] = useState("");
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showTimeSheet, setShowTimeSheet] = useState(false); // State for showing time sheet history
 
   useEffect(() => {
     const fetchTimeSheetHistory = async () => {
@@ -46,6 +46,10 @@ const TimeSheet = () => {
     }
   };
 
+  const handleShowTimeSheet = () => {
+    setShowTimeSheet((prev) => !prev); // Toggle the visibility
+  };
+
   return (
     <TimeSheetHistory
       hours={hours}
@@ -56,6 +60,8 @@ const TimeSheet = () => {
       timeSheetHistory={timeSheetHistory}
       loading={loading}
       error={error}
+      showTimeSheet={showTimeSheet} // Pass down the state
+      handleShowTimeSheet={handleShowTimeSheet} // Pass down the toggle function
     />
   );
 };

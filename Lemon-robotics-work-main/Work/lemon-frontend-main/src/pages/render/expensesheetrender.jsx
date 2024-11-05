@@ -1,7 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Button, TextField, Typography, Paper, Grid } from "@mui/material";
-import { Link } from "react-router-dom"; // Import Link from React Router
-import { submitEmployeeExpense, getEmployeeExpense } from "../../apis/expensesheetapi";
+
+// Utility function to group expenses by month and year
+const groupExpensesByMonth = (expenses) => {
+  return expenses.reduce((groups, expense) => {
+    const date = new Date(expense.date);
+    const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+
+    if (!groups[monthYear]) {
+      groups[monthYear] = [];
+    }
+    groups[monthYear].push(expense);
+    return groups;
+  }, {});
+};
+
 const ExpenseSheetDisplay = ({
   expense,
   description,
@@ -13,6 +26,8 @@ const ExpenseSheetDisplay = ({
   handleShowExpenseSheet,
   showExpenseSheet,
 }) => {
+  const groupedExpenses = groupExpensesByMonth(expenseHistory);
+
   return (
     <Box
       sx={{
@@ -22,6 +37,7 @@ const ExpenseSheetDisplay = ({
         alignItems: "flex-start",
         height: "100vh",
         padding: 2,
+        marginTop: "60px", // Add margin to move it below the header
         backgroundColor: "#e0f7fa",
         overflow: "hidden",
       }}
@@ -89,16 +105,6 @@ const ExpenseSheetDisplay = ({
         >
           Show My Expense Sheet
         </Button>
-
-        {/* Navigation Buttons */}
-        <Box sx={{ mt: 3, display: "flex", justifyContent: "space-around" }}>
-          <Button variant="contained" color="primary" component={Link} to="/time-sheet">
-            Go to Time Sheet
-          </Button>
-          <Button variant="contained" color="secondary" component={Link} to="/employee">
-            Go to Employee Card
-          </Button>
-        </Box>
       </Paper>
 
       {/* Expense Sheet History */}
@@ -117,13 +123,21 @@ const ExpenseSheetDisplay = ({
             </Typography>
           ) : (
             <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
-              {expenseHistory.map((item, index) => (
-                <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
-                  <Typography variant="body1">
-                    <strong>Amount:</strong> ${item.amount} <br />
-                    <strong>Description:</strong> {item.description}
+              {Object.entries(groupedExpenses).map(([monthYear, expenses], index) => (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <Typography variant="h6" sx={{ color: "#1976d2", mb: 1 }}>
+                    {monthYear}
                   </Typography>
-                </Paper>
+                  {expenses.map((item, idx) => (
+                    <Paper key={idx} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
+                      <Typography variant="body1">
+                        <strong>Date:</strong> {item.date} <br />
+                        <strong>Amount:</strong> ${item.amount} <br />
+                        <strong>Description:</strong> {item.description}
+                      </Typography>
+                    </Paper>
+                  ))}
+                </Box>
               ))}
             </Box>
           )}

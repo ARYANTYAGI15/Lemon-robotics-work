@@ -58,6 +58,12 @@ export const navbarMainMenuItems = [
     label: "Holidays",
     route: "/holiday",
   },
+  {
+    id: 5,
+    icon: <LeaveIcon2/>,
+    label: "Expense",
+    route: "/hr/expense-sheet",
+  }
 ];
 
 const drawerWidth = 240;

@@ -46,7 +46,7 @@ function SideNavHeader(props) {
           <Menu />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
-          WorkSmart
+          Lemon Robotics
         </Typography>
       </Toolbar>
     </StyledAppBar>

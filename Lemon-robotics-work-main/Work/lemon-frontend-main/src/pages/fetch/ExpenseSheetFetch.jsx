@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
- // Adjust the import path as needed
+// Adjust the import path as needed
 import { Link } from "react-router-dom"; // Import Link from React Router
-import { submitEmployeeExpense, getEmployeeExpense } from "../../apis/expensesheetapi";
+import {
+  submitEmployeeExpense,
+  getEmployeeExpense,
+} from "../../apis/expensesheetapi";
 import ExpenseSheetDisplay from "../render/expensesheetrender";
-const ExpenseSheet = () => {
+const ExpenseSheetFetch = () => {
   const [expense, setExpense] = useState("");
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -43,7 +46,10 @@ const ExpenseSheet = () => {
       const updatedExpenses = await getEmployeeExpense();
       setExpenseHistory(updatedExpenses);
     } catch (error) {
-      console.error("Error submitting expense:", error.response?.data || error.message);
+      console.error(
+        "Error submitting expense:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -53,7 +59,10 @@ const ExpenseSheet = () => {
       setExpenseHistory(expenses);
       setShowExpenseSheet(true);
     } catch (error) {
-      console.error("Error fetching expenses:", error.response?.data || error.message);
+      console.error(
+        "Error fetching expenses:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -72,4 +81,4 @@ const ExpenseSheet = () => {
   );
 };
 
-export default ExpenseSheet;
+export default ExpenseSheetFetch;

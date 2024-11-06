@@ -15,6 +15,7 @@ import {
   EmployeeCardFetch,
 } from "./pages";
 import SideNav from "./components/SideNav/SideNav";
+import ExpenseSheetForm from "./pages/forms/ExpenseSheetForm";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
@@ -53,7 +54,7 @@ function App() {
 
         {/* Protected routes */}
         <Route path="/hr/employee" element={<EmployeeCardFetch />} />
-        <Route path="/hr/expense-sheet" element={<ExpenseSheetFetch />} />
+        <Route path="/hr/expense-sheet" element={<ExpenseSheetForm />} />
         <Route path="/hr/time-sheet" element={<TimeSheet />} />
       </Routes>
       <Footer />

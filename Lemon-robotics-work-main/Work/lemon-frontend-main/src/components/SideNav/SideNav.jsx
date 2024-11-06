@@ -36,9 +36,9 @@ export const navbarMainMenuItems = [
   },
   {
     id: 1,
-    icon: <AttendanceIcon />,
-    label: "Attendance",
-    route: "/hr/attendance",
+    icon: <TaskIcon />,
+    label: "Expense Sheet",
+    route: "/hr/expense-sheet",
   },
   {
     id: 2,
@@ -48,7 +48,7 @@ export const navbarMainMenuItems = [
   },
   {
     id: 3,
-    icon: <TaskIcon />,
+    icon: <AttendanceIcon />,
     label: "Tasks",
     route: "/task",
   },
@@ -60,10 +60,10 @@ export const navbarMainMenuItems = [
   },
   {
     id: 5,
-    icon: <LeaveIcon2/>,
+    icon: <LeaveIcon2 />,
     label: "Expense",
     route: "/hr/expense-sheet",
-  }
+  },
 ];
 
 const drawerWidth = 240;

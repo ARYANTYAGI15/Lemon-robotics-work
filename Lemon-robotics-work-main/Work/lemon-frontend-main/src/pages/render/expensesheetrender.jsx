@@ -5,7 +5,9 @@ import { Box, Button, TextField, Typography, Paper, Grid } from "@mui/material";
 const groupExpensesByMonth = (expenses) => {
   return expenses.reduce((groups, expense) => {
     const date = new Date(expense.date);
-    const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+    const monthYear = `${date.toLocaleString("default", {
+      month: "long",
+    })} ${date.getFullYear()}`;
 
     if (!groups[monthYear]) {
       groups[monthYear] = [];
@@ -15,7 +17,7 @@ const groupExpensesByMonth = (expenses) => {
   }, {});
 };
 
-const ExpenseSheetDisplay = ({
+const ExpenseSheetRender = ({
   expense,
   description,
   setExpense,
@@ -44,9 +46,18 @@ const ExpenseSheetDisplay = ({
     >
       <Paper
         elevation={3}
-        sx={{ padding: 4, borderRadius: 2, width: "45%", backgroundColor: "#ffffff", mr: 2 }}
+        sx={{
+          padding: 4,
+          borderRadius: 2,
+          width: "45%",
+          backgroundColor: "#ffffff",
+          mr: 2,
+        }}
       >
-        <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+        >
           Add Expense
         </Typography>
         <form onSubmit={handleSubmit}>
@@ -92,7 +103,10 @@ const ExpenseSheetDisplay = ({
         </form>
 
         {showConfirmation && (
-          <Typography variant="h6" sx={{ mt: 2, textAlign: "center", color: "green" }}>
+          <Typography
+            variant="h6"
+            sx={{ mt: 2, textAlign: "center", color: "green" }}
+          >
             Expense added successfully!
           </Typography>
         )}
@@ -111,34 +125,52 @@ const ExpenseSheetDisplay = ({
       {showExpenseSheet && (
         <Paper
           elevation={3}
-          sx={{ padding: 4, borderRadius: 2, width: "45%", backgroundColor: "#ffffff", ml: 2 }}
+          sx={{
+            padding: 4,
+            borderRadius: 2,
+            width: "45%",
+            backgroundColor: "#ffffff",
+            ml: 2,
+          }}
         >
-          <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
+          <Typography
+            variant="h4"
+            sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+          >
             My Expense Sheet
           </Typography>
 
           {expenseHistory.length === 0 ? (
-            <Typography variant="body1" sx={{ textAlign: "center", color: "#555" }}>
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "center", color: "#555" }}
+            >
               No expenses recorded yet.
             </Typography>
           ) : (
             <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
-              {Object.entries(groupedExpenses).map(([monthYear, expenses], index) => (
-                <Box key={index} sx={{ mb: 2 }}>
-                  <Typography variant="h6" sx={{ color: "#1976d2", mb: 1 }}>
-                    {monthYear}
-                  </Typography>
-                  {expenses.map((item, idx) => (
-                    <Paper key={idx} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
-                      <Typography variant="body1">
-                        <strong>Date:</strong> {item.date} <br />
-                        <strong>Amount:</strong> ${item.amount} <br />
-                        <strong>Description:</strong> {item.description}
-                      </Typography>
-                    </Paper>
-                  ))}
-                </Box>
-              ))}
+              {Object.entries(groupedExpenses).map(
+                ([monthYear, expenses], index) => (
+                  <Box key={index} sx={{ mb: 2 }}>
+                    <Typography variant="h6" sx={{ color: "#1976d2", mb: 1 }}>
+                      {monthYear}
+                    </Typography>
+                    {expenses.map((item, idx) => (
+                      <Paper
+                        key={idx}
+                        elevation={1}
+                        sx={{ padding: 1, margin: 1, borderRadius: 2 }}
+                      >
+                        <Typography variant="body1">
+                          <strong>Date:</strong> {item.date} <br />
+                          <strong>Amount:</strong> ${item.amount} <br />
+                          <strong>Description:</strong> {item.description}
+                        </Typography>
+                      </Paper>
+                    ))}
+                  </Box>
+                )
+              )}
             </Box>
           )}
         </Paper>
@@ -147,4 +179,4 @@ const ExpenseSheetDisplay = ({
   );
 };
 
-export default ExpenseSheetDisplay;
+export default ExpenseSheetRender;

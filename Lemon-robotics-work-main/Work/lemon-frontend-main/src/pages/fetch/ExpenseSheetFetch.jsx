@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getEmployeeExpense, submitEmployeeExpense } from "../../apis/expensesheetapi";
-import ExpenseSheetDisplay from "../render/expensesheetrender";
+import {
+  getEmployeeExpense,
+  submitEmployeeExpense,
+} from "../../apis/expensesheetapi";
+import ExpenseSheetDisplay from "../render/ExpenseSheetRender";
 
 const ExpenseSheetFetch = () => {
   const [expense, setExpense] = useState("");
@@ -15,7 +18,9 @@ const ExpenseSheetFetch = () => {
         const expenses = await getEmployeeExpense();
         if (Array.isArray(expenses)) {
           // Sort expenses by date in descending order
-          const sortedExpenses = expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+          const sortedExpenses = expenses.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          );
           setExpenseHistory(sortedExpenses);
         } else {
           console.error("Received non-array data:", expenses);
@@ -42,10 +47,15 @@ const ExpenseSheetFetch = () => {
 
       // Refresh expense history and sort by date
       const updatedExpenses = await getEmployeeExpense();
-      const sortedUpdatedExpenses = updatedExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const sortedUpdatedExpenses = updatedExpenses.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
       setExpenseHistory(sortedUpdatedExpenses);
     } catch (error) {
-      console.error("Error submitting expense:", error.response?.data || error.message);
+      console.error(
+        "Error submitting expense:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -53,11 +63,16 @@ const ExpenseSheetFetch = () => {
     try {
       const expenses = await getEmployeeExpense();
       // Sort expenses by date in descending order
-      const sortedExpenses = expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const sortedExpenses = expenses.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
       setExpenseHistory(sortedExpenses);
       setShowExpenseSheet(true);
     } catch (error) {
-      console.error("Error fetching expenses:", error.response?.data || error.message);
+      console.error(
+        "Error fetching expenses:",
+        error.response?.data || error.message
+      );
     }
   };
 

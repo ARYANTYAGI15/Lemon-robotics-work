@@ -1,5 +1,6 @@
-import React from 'react';
-import { Box, Button, Paper, Typography, Grid ,TextField} from "@mui/material";
+import React, { useState } from 'react';
+import { Box, Button, Paper, Typography, Grid, TextField, TablePagination, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+
 const groupTimeSheetsByMonth = (timeSheetHistory) => {
   return timeSheetHistory.reduce((groups, timeSheet) => {
     const date = new Date(timeSheet.work_date);
@@ -12,6 +13,14 @@ const groupTimeSheetsByMonth = (timeSheetHistory) => {
     return groups;
   }, {});
 };
+
+const filterTimeSheetsByMonthYear = (timeSheetHistory, month, year) => {
+  return timeSheetHistory.filter((timeSheet) => {
+    const date = new Date(timeSheet.work_date);
+    return date.getMonth() === month && date.getFullYear() === year;
+  });
+};
+
 const TimeSheetHistory = ({
   hours,
   setHours,
@@ -21,10 +30,25 @@ const TimeSheetHistory = ({
   timeSheetHistory,
   loading,
   error,
-  showTimeSheet, // Use the prop to manage visibility
+  showTimeSheet,
   handleShowTimeSheet,
 }) => {
-  const groupedTimeSheets = groupTimeSheetsByMonth(timeSheetHistory);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // Filtered time sheets based on the selected month and year
+  const filteredTimeSheets = filterTimeSheetsByMonthYear(timeSheetHistory, selectedMonth, selectedYear);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "flex-start", height: "100vh", padding: 2, marginTop: "60px", backgroundColor: "#e0f7fa", overflow: "hidden" }}>
@@ -81,26 +105,66 @@ const TimeSheetHistory = ({
         <Paper elevation={3} sx={{ padding: 4, borderRadius: 2, width: "45%", backgroundColor: "#ffffff", ml: 2 }}>
           <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>My Time Sheet History</Typography>
 
-          {timeSheetHistory.length === 0 ? (
+          {/* Month and Year Selection */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+              <InputLabel>Month</InputLabel>
+              <Select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                label="Month"
+              >
+                {Array.from({ length: 12 }, (_, i) => (
+                  <MenuItem key={i} value={i}>
+                    {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+              <InputLabel>Year</InputLabel>
+              <Select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                label="Year"
+              >
+                {Array.from(new Set(timeSheetHistory.map((timeSheet) => new Date(timeSheet.work_date).getFullYear()))).map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {filteredTimeSheets.length === 0 ? (
             <Typography variant="body1" sx={{ textAlign: "center", color: "#555" }}>
-              No time sheets recorded yet.
+              No time sheets recorded for this month.
             </Typography>
           ) : (
-            <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
-              {Object.entries(groupedTimeSheets).map(([monthYear, timeSheets], index) => (
-                <Box key={index} sx={{ mb: 2 }}>
-                  <Typography variant="h6" sx={{ color: "#1976d2", mb: 1 }}>{monthYear}</Typography>
-                  {timeSheets.map((item, idx) => (
-                    <Paper key={idx} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
-                      <Typography variant="body1">
-                        <strong>Date:</strong> {item.work_date} <br />
-                        <strong>Hours Worked:</strong> {item.hours_worked}
-                      </Typography>
-                    </Paper>
-                  ))}
-                </Box>
-              ))}
-            </Box>
+            <>
+              <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
+                {filteredTimeSheets.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
+                  <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
+                    <Typography variant="body1">
+                      <strong>Date:</strong> {item.work_date} <br />
+                      <strong>Hours Worked:</strong> {item.hours_worked}
+                    </Typography>
+                  </Paper>
+                ))}
+              </Box>
+
+              {/* Table Pagination */}
+              <TablePagination
+                component="div"
+                count={filteredTimeSheets.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPageOptions={[5, 10, 25]}
+              />
+            </>
           )}
         </Paper>
       )}

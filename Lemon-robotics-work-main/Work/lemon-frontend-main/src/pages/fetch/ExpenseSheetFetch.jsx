@@ -3,7 +3,7 @@ import {
   getEmployeeExpense,
   submitEmployeeExpense,
 } from "../../apis/expensesheetapi";
-import ExpenseSheetDisplay from "../render/ExpenseSheetRender";
+import ExpenseSheetDisplay from "../render/expensesheetrender";
 
 const ExpenseSheetFetch = () => {
   const [expense, setExpense] = useState("");

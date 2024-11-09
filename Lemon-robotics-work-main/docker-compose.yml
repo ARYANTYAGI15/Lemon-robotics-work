@@ -3,8 +3,8 @@ version: "3.8"
 services:
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: ./Work/lemon-frontend-main  # Path to the frontend directory
+      dockerfile: Dockerfile               # Dockerfile inside the frontend folder
     ports:
       - "3000:3000"  # Maps local port 3000 to container port 3000 for frontend
     depends_on:
@@ -14,8 +14,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: ./Work/backend/empmanagebackend-main/empmanage  # Correct path to the Dockerfile
+      dockerfile: Dockerfile                     # Dockerfile inside the empmanage folder
     ports:
       - "5000:5000"  # Maps local port 5000 to container port 5000 for backend
     depends_on:

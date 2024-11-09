@@ -14,18 +14,19 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Build the React app
+# Build the React app (output should go to the `dist` folder)
 RUN npm run build
 
+# Step 2: Use an official NGINX image to serve the app
 FROM nginx:alpine
 
-# Copy built React app to NGINX HTML directory
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy built React app to NGINX HTML directory (use `dist` instead of `build` if applicable)
+COPY --from=build /app/dist /usr/share/nginx/html  # <-- Changed `build` to `dist`
 
-# Copy custom NGINX configuration
+# Copy custom NGINX configuration, if you have one
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port
+# Expose port 80
 EXPOSE 80
 
 # Run NGINX

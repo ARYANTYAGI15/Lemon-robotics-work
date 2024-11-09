@@ -6,6 +6,9 @@ WORKDIR /app
 
 # Copy dependency files and install dependencies
 COPY package*.json ./
+RUN npm config set timeout 1000000 && npm install || npm install || npm install
+
+RUN npm cache clean --force
 RUN npm install
 
 # Copy source code

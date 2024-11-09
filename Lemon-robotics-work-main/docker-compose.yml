@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Maps local port 3000 to container port 3000 for frontend
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # Maps local port 5000 to container port 5000 for backend
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: mysql://user:password@database:3306/mydatabase
+    networks:
+      - app-network
+
+  database:
+    image: mysql:8.0  # Use a stable MySQL image version
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql  # Optional: run SQL script on startup
+    ports:
+      - "3306:3306"  # Maps MySQL port
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:

@@ -16,7 +16,7 @@ COPY . .
 
 # Build the React app (output should go to the `dist` folder)
 RUN npm run build
-
+RUN npm run dev
 # Step 2: Use an official NGINX image to serve the app
 FROM nginx:alpine
 

@@ -21,5 +21,9 @@ RUN pip3 install django-cors-headers
 COPY . /app 
 
 # Run the Django development server on port 8000
+<<<<<<< HEAD
 CMD ["sh", "-c", "sleep 10 && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
 
+=======
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+>>>>>>> 029de12ecfd68605a5457f677aca33ab9a23a7b6

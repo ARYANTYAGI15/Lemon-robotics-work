@@ -124,7 +124,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "employeemanage",
-        "HOST": "localhost",
+        "HOST": "database",
         "USER": "root",
         # "PASSWORD": "A@C9bu1ze",
         "PASSWORD": "Aryan@1234",

@@ -30,11 +30,10 @@ services:
   database:
     image: mysql:8.0  # Use a stable MySQL image version
     environment:
-      MYSQL_ROOT_PASSWORD: Aryan@1234       # Use this to set the root password
-      MYSQL_DATABASE: employeemanage        # Database to create on initialization
-      # Optional: if you want a non-root user
-      # MYSQL_USER: myuser
-      # MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
     volumes:
       - db_data:/var/lib/mysql  # Persist MySQL data
       # Uncomment the next line if you have a custom init.sql script
@@ -50,4 +49,3 @@ volumes:
 
 networks:
   app-network:
-    driver: bridge  # Ensures the network uses bridge mode

@@ -4,15 +4,14 @@ services:
       context: ./Work/lemon-frontend-main  # Path to the frontend directory
       dockerfile: Dockerfile               # Dockerfile inside the frontend folder
     ports:
-      - "3000:3000"  # Maps local port 3000 to container port 3000 for frontend
+      - "5173:5173"  # Maps local port 5173 to container port 5173 for frontend (Vite default)
     depends_on:
       - backend
     networks:
       - app-network
     environment:
-      - VUE_APP_API_URL=http://backend:8000  # Set the correct API URL for frontend (backend:8000)
-    restart: always  # Ensures the frontend container restarts if it fails
-
+      - VITE_API_URL=http://backend:8000  # Set the correct API URL for frontend (backend:8000)
+    restart: always
   backend:
     build:
       context: ./Work/backend/empmanagebackend-main/empmanage  # Path to the backend Dockerfile

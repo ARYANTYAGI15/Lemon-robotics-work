@@ -1,34 +1,23 @@
-# Step 1: Use an official Node.js image as a build environment
-FROM node:16 AS build
+# Use the official Node.js image to set up the environment
+FROM node:16
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy dependency files and install dependencies
-COPY package*.json ./
-RUN npm config set timeout 1000000 && npm install || npm install || npm install
+# Set a longer timeout as an environment variable
+ENV NPM_CONFIG_FETCH_TIMEOUT=1000000
 
-RUN npm cache clean --force
+# Copy package.json and package-lock.json to install dependencies first
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy source code
+# Copy the rest of the application code into the container
 COPY . .
 
-# Build the React app (output should go to the `dist` folder)
-RUN npm run build
-RUN npm run dev
-# Step 2: Use an official NGINX image to serve the app
-FROM nginx:alpine
+# Expose the port Vite will use (5173)
+EXPOSE 5173
 
-# Copy built React app to NGINX HTML directory (use `dist` instead of `build` if applicable)
-COPY --from=build /app/dist /usr/share/nginx/html  
-
-# Copy custom NGINX configuration, if you have one
-# Ensure you have nginx.conf in the current directory, or remove this line if not needed
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Run NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Vite development server
+CMD ["npm", "run", "dev", "--", "--host"]

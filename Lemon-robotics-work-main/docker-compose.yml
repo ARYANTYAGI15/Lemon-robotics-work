@@ -4,14 +4,15 @@ services:
       context: ./Work/lemon-frontend-main  # Path to the frontend directory
       dockerfile: Dockerfile               # Dockerfile inside the frontend folder
     ports:
-      - "5173:5173"  # Maps local port 5173 to container port 5173 for frontend (Vite default)
+      - "3000:3000"  # Maps local port 3000 to container port 3000 for frontend
     depends_on:
       - backend
     networks:
       - app-network
     environment:
-      - VITE_API_URL=http://backend:8000  # Set the correct API URL for frontend (backend:8000)
-    restart: always
+      - VUE_APP_API_URL=http://backend:8000  # Set the correct API URL for frontend (backend:8000)
+    restart: always  # Ensures the frontend container restarts if it fails
+
   backend:
     build:
       context: ./Work/backend/empmanagebackend-main/empmanage  # Path to the backend Dockerfile
@@ -29,10 +30,11 @@ services:
   database:
     image: mysql:8.0  # Use a stable MySQL image version
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword  # Set root password for MySQL
-      MYSQL_USER: user                   # MySQL user
-      MYSQL_PASSWORD: password           # MySQL user's password
-      MYSQL_DATABASE: employeemanage  # Database to create on initialization
+      MYSQL_ROOT_PASSWORD: Aryan@1234       # Use this to set the root password
+      MYSQL_DATABASE: employeemanage        # Database to create on initialization
+      # Optional: if you want a non-root user
+      # MYSQL_USER: myuser
+      # MYSQL_PASSWORD: mypassword
     volumes:
       - db_data:/var/lib/mysql  # Persist MySQL data
       # Uncomment the next line if you have a custom init.sql script
@@ -48,4 +50,4 @@ volumes:
 
 networks:
   app-network:
-    driver: bridge  # En
+    driver: bridge  # Ensures the network uses bridge mode

@@ -5,7 +5,7 @@ FROM node:16
 WORKDIR /app
 
 # Set a longer timeout as an environment variable
-ENV NPM_CONFIG_FETCH_TIMEOUT=1000000
+ENV NPM_CONFIG_FETCH_TIMEOUT=10000000
 
 # Copy package.json and package-lock.json to install dependencies first
 COPY package*.json ./

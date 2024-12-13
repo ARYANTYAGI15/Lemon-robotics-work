@@ -2,7 +2,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from .filters import EmployeeTimesheetFilter
 from .models import (
     Employee,
     EmployeeAttendance,
@@ -134,8 +136,12 @@ class EmployeeLeaveViewSet(ModelViewSet):
         # You can add additional logic here if needed
 
         return response
+
+
 from rest_framework import viewsets
 from rest_framework import status
+
+
 class EmployeeExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeExpenseSerializer
     permission_classes = [IsAuthenticated]
@@ -147,7 +153,9 @@ class EmployeeExpenseViewSet(viewsets.ModelViewSet):
 
         # Get the employee instance associated with the logged-in user
         employee = Employee.objects.get(user_id=user.id)
-        return EmployeeExpense.objects.select_related("employee").filter(employee=employee)
+        return EmployeeExpense.objects.select_related("employee").filter(
+            employee=employee
+        )
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -160,19 +168,19 @@ class EmployeeExpenseViewSet(viewsets.ModelViewSet):
         employee = Employee.objects.get(user=self.request.user)
         serializer.save(employee=employee)
 
-    @action(detail=False, methods=['get', 'post'], url_path='me')
+    @action(detail=False, methods=["get", "post"], url_path="me")
     def me(self, request):
         try:
             # Get the employee instance associated with the logged-in user
             employee = Employee.objects.get(user_id=request.user.id)
 
-            if request.method == 'GET':
+            if request.method == "GET":
                 # Retrieve expenses for the employee
                 expenses = EmployeeExpense.objects.filter(employee=employee)
                 serializer = self.get_serializer(expenses, many=True)
                 return Response(serializer.data)
 
-            elif request.method == 'POST':
+            elif request.method == "POST":
                 # Create a new expense for the employee
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
@@ -182,15 +190,17 @@ class EmployeeExpenseViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except Employee.DoesNotExist:
-            return Response({"error": "Employee not found."}, status=status.HTTP_404_NOT_FOUND)
-
+            return Response(
+                {"error": "Employee not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class EmployeeTimesheetViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete", "head", "options"]
     serializer_class = EmployeeTimesheetSerializer
     pagination_class = DefaultPagination
-    filter_backends = [OrderingFilter]
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = EmployeeTimesheetFilter
 
     def get_permissions(self):
         return [IsAuthenticated()]
@@ -209,19 +219,19 @@ class EmployeeTimesheetViewSet(viewsets.ModelViewSet):
         self.employee = Employee.objects.select_related("user").get(user_id=user.id)
         return {"employee_id": self.employee.id}
 
-    @action(detail=False, methods=['get', 'post'], url_path='me')
+    @action(detail=False, methods=["get", "post"], url_path="me")
     def me(self, request):
         try:
             # Get the employee instance associated with the logged-in user
             employee = Employee.objects.get(user_id=request.user.id)
 
-            if request.method == 'GET':
+            if request.method == "GET":
                 # Retrieve timesheets for the employee
                 timesheets = EmployeeTimesheet.objects.filter(employee=employee)
                 serializer = self.get_serializer(timesheets, many=True)
                 return Response(serializer.data)
 
-            elif request.method == 'POST':
+            elif request.method == "POST":
                 # Create a new timesheet entry for the employee
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
@@ -231,4 +241,6 @@ class EmployeeTimesheetViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except Employee.DoesNotExist:
-            return Response({"error": "Employee not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Employee not found."}, status=status.HTTP_404_NOT_FOUND
+            )

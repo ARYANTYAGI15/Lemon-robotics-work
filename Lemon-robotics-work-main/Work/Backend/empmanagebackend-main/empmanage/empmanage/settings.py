@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "django_filters",
     "rest_framework",
-    'corsheaders',
+    "corsheaders",
     "djoser",
     "playground",
     "core",
@@ -87,7 +88,11 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = ("http://localhost:3000", "http://localhost:5173","http://localhost:8888")
+CORS_ORIGIN_WHITELIST = (
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:8888",
+)
 
 
 INTERNAL_IPS = [
@@ -124,7 +129,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "employeemanage",
-        "HOST": "database",
+        "HOST": "localhost",
         "USER": "root",
         # "PASSWORD": "A@C9bu1ze",
         "PASSWORD": "Aryan@1234",

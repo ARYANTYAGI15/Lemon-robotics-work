@@ -1,5 +1,17 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Paper, Grid, TablePagination, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Grid,
+  TablePagination,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 
 // Utility function to filter expenses by month and year
 const filterExpensesByMonthYear = (expenses, month, year) => {
@@ -9,7 +21,7 @@ const filterExpensesByMonthYear = (expenses, month, year) => {
   });
 };
 
-const ExpenseSheetDisplay = ({
+const ExpenseSheetRender = ({
   expense,
   description,
   setExpense,
@@ -26,7 +38,11 @@ const ExpenseSheetDisplay = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Filter expenses based on the selected month and year
-  const filteredExpenses = filterExpensesByMonthYear(expenseHistory, selectedMonth, selectedYear);
+  const filteredExpenses = filterExpensesByMonthYear(
+    expenseHistory,
+    selectedMonth,
+    selectedYear
+  );
 
   // Handle pagination changes
   const handleChangePage = (event, newPage) => {
@@ -54,9 +70,18 @@ const ExpenseSheetDisplay = ({
     >
       <Paper
         elevation={3}
-        sx={{ padding: 4, borderRadius: 2, width: "45%", backgroundColor: "#ffffff", mr: 2 }}
+        sx={{
+          padding: 4,
+          borderRadius: 2,
+          width: "45%",
+          backgroundColor: "#ffffff",
+          mr: 2,
+        }}
       >
-        <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+        >
           Add Expense
         </Typography>
         <form onSubmit={handleSubmit}>
@@ -102,7 +127,10 @@ const ExpenseSheetDisplay = ({
         </form>
 
         {showConfirmation && (
-          <Typography variant="h6" sx={{ mt: 2, textAlign: "center", color: "green" }}>
+          <Typography
+            variant="h6"
+            sx={{ mt: 2, textAlign: "center", color: "green" }}
+          >
             Expense added successfully!
           </Typography>
         )}
@@ -121,14 +149,23 @@ const ExpenseSheetDisplay = ({
       {showExpenseSheet && (
         <Paper
           elevation={3}
-          sx={{ padding: 4, borderRadius: 2, width: "45%", backgroundColor: "#ffffff", ml: 2 }}
+          sx={{
+            padding: 4,
+            borderRadius: 2,
+            width: "45%",
+            backgroundColor: "#ffffff",
+            ml: 2,
+          }}
         >
-          <Typography variant="h4" sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}>
+          <Typography
+            variant="h4"
+            sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+          >
             My Expense Sheet
           </Typography>
 
           {/* Month and Year Selection */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <FormControl variant="outlined" sx={{ minWidth: 120 }}>
               <InputLabel>Month</InputLabel>
               <Select
@@ -138,7 +175,9 @@ const ExpenseSheetDisplay = ({
               >
                 {Array.from({ length: 12 }, (_, i) => (
                   <MenuItem key={i} value={i}>
-                    {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                    {new Date(0, i).toLocaleString("default", {
+                      month: "long",
+                    })}
                   </MenuItem>
                 ))}
               </Select>
@@ -150,7 +189,13 @@ const ExpenseSheetDisplay = ({
                 onChange={(e) => setSelectedYear(e.target.value)}
                 label="Year"
               >
-                {Array.from(new Set(expenseHistory.map((expense) => new Date(expense.date).getFullYear()))).map((year) => (
+                {Array.from(
+                  new Set(
+                    expenseHistory.map((expense) =>
+                      new Date(expense.date).getFullYear()
+                    )
+                  )
+                ).map((year) => (
                   <MenuItem key={year} value={year}>
                     {year}
                   </MenuItem>
@@ -160,7 +205,10 @@ const ExpenseSheetDisplay = ({
           </Box>
 
           {filteredExpenses.length === 0 ? (
-            <Typography variant="body1" sx={{ textAlign: "center", color: "#555" }}>
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "center", color: "#555" }}
+            >
               No expenses recorded for this month.
             </Typography>
           ) : (
@@ -169,7 +217,11 @@ const ExpenseSheetDisplay = ({
                 {filteredExpenses
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((item, index) => (
-                    <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
+                    <Paper
+                      key={index}
+                      elevation={1}
+                      sx={{ padding: 1, margin: 1, borderRadius: 2 }}
+                    >
                       <Typography variant="body1">
                         <strong>Date:</strong> {item.date} <br />
                         <strong>Amount:</strong> ${item.amount} <br />
@@ -197,4 +249,4 @@ const ExpenseSheetDisplay = ({
   );
 };
 
-export default ExpenseSheetDisplay;
+export default ExpenseSheetRender;

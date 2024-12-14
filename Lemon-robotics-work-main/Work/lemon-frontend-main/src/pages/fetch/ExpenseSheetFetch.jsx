@@ -61,13 +61,15 @@ const ExpenseSheetFetch = () => {
 
   const handleShowExpenseSheet = async () => {
     try {
-      const expenses = await getEmployeeExpense();
-      // Sort expenses by date in descending order
-      const sortedExpenses = expenses.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-      setExpenseHistory(sortedExpenses);
-      setShowExpenseSheet(true);
+      if (!showExpenseSheet) {
+        // Fetch and sort expenses only if the sheet is about to be shown
+        const expenses = await getEmployeeExpense();
+        const sortedExpenses = expenses.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setExpenseHistory(sortedExpenses);
+      }
+      setShowExpenseSheet((prev) => !prev); // Toggle visibility
     } catch (error) {
       console.error(
         "Error fetching expenses:",

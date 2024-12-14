@@ -4,7 +4,7 @@ import {
   submitEmployeeExpense,
 } from "../../apis/expensesheetapi";
 import ExpenseSheetRender from "../render/expensesheetrender";
-const ExpenseSheetFetch = () => {
+const ExpenseSheetForm = () => {
   const [expense, setExpense] = useState("");
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -66,7 +66,7 @@ const ExpenseSheetFetch = () => {
         (a, b) => new Date(b.date) - new Date(a.date)
       );
       setExpenseHistory(sortedExpenses);
-      setShowExpenseSheet(true);
+      setShowExpenseSheet(!showExpenseSheet);
     } catch (error) {
       console.error(
         "Error fetching expenses:",
@@ -90,4 +90,4 @@ const ExpenseSheetFetch = () => {
   );
 };
 
-export default ExpenseSheetFetch;
+export default ExpenseSheetForm;

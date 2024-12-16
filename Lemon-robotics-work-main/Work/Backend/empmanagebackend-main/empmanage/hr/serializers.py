@@ -223,9 +223,10 @@ class EmployeeTimesheetSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeTimesheet
         fields = [
-            "id",
-            "work_date",  # Ensure the field matches your model
-            "hours_worked",  # Correct to hours_worked since that's the model field
+            "id",              # Return the ID of the created timesheet
+            "work_date",       # Date field for the timesheet
+            "hours_worked",    # Number of hours worked
+            "description",     # Description field for tasks
         ]
         read_only_fields = ["employee"]  # Employee will be set automatically
 

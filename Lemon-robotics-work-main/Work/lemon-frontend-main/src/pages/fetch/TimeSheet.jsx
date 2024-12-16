@@ -5,6 +5,7 @@ import TimeSheetHistory from "../render/TimesheetHistory";
 const TimeSheet = () => {
   const [hours, setHours] = useState("");
   const [date, setDate] = useState("");
+  const [taskDescription, setTaskDescription] = useState(""); // New state for task description
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,12 +34,13 @@ const TimeSheet = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (hours && date) {
+    if (hours && date && taskDescription) { // Include taskDescription in validation
       try {
-        const newEntry = await submitWorkingHours(hours, date);
+        const newEntry = await submitWorkingHours(hours, date, taskDescription); // Pass taskDescription
         setTimeSheetHistory((prev) => [...prev, newEntry]);
         setHours("");
         setDate("");
+        setTaskDescription(""); // Clear taskDescription after submission
       } catch (error) {
         console.error("Error submitting time sheet:", error);
         setError("Failed to submit time sheet entry.");
@@ -56,6 +58,8 @@ const TimeSheet = () => {
       setHours={setHours}
       date={date}
       setDate={setDate}
+      taskDescription={taskDescription} // Pass taskDescription state
+      setTaskDescription={setTaskDescription} // Pass setTaskDescription
       handleSubmit={handleSubmit}
       timeSheetHistory={timeSheetHistory}
       loading={loading}

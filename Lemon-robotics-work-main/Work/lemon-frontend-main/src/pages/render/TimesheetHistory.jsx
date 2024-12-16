@@ -26,6 +26,8 @@ const TimeSheetHistory = ({
   setHours,
   date,
   setDate,
+  taskDescription, // Added prop for task description
+  setTaskDescription, // Added setter for task description
   handleSubmit,
   timeSheetHistory,
   loading,
@@ -78,6 +80,17 @@ const TimeSheetHistory = ({
                 fullWidth
                 variant="outlined"
                 InputLabelProps={{ shrink: true }}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Task Description" // New description field
+                type="text"
+                value={taskDescription}
+                onChange={(e) => setTaskDescription(e.target.value)}
+                fullWidth
+                variant="outlined"
                 required
               />
             </Grid>
@@ -148,7 +161,8 @@ const TimeSheetHistory = ({
                   <Paper key={index} elevation={1} sx={{ padding: 1, margin: 1, borderRadius: 2 }}>
                     <Typography variant="body1">
                       <strong>Date:</strong> {item.work_date} <br />
-                      <strong>Hours Worked:</strong> {item.hours_worked}
+                      <strong>Hours Worked:</strong> {item.hours_worked} <br />
+                      <strong>Task Description:</strong> {item.task_description} {/* Displaying task description */}
                     </Typography>
                   </Paper>
                 ))}

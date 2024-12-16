@@ -219,6 +219,7 @@ class EmployeeTimesheet(models.Model):
     work_date = models.DateField()
     hours_worked = models.DecimalField(max_digits=5, decimal_places=2)
     task_description = models.TextField()
+    
 
 
 # Sick Leave=7 leaves (Jan-dec)

@@ -129,11 +129,11 @@ WSGI_APPLICATION = "empmanage.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "employeemanage",
-        "HOST": "localhost",
-        "USER": "root",
-        # "PASSWORD": "A@C9bu1ze",
-        "PASSWORD": "Aryan@1234",
+        "NAME": "employeemanage",  # Database name
+        "HOST": "database",        # Host is the name of the MySQL service in your docker-compose.yml
+        "PORT": "3306",            # Port on which the MySQL service is accessible from the host
+        "USER": "root",            # MySQL username
+        "PASSWORD": "Aryan@1234",  # MySQL password
     }
 }
 

@@ -40,7 +40,7 @@ services:
       # Uncomment the next line if you have a custom init.sql script
       # - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "3306:3306"  # Maps MySQL port 3306 to the host
+      - "3307:3306"  # Maps MySQL port 3306 to the host
     networks:
       - app-network
     restart: always  # Ensures the database container restarts if it fails

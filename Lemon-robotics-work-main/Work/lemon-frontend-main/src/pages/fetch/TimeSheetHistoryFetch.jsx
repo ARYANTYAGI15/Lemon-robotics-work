@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   submitWorkingHours,
-  getEmployeeWorkingHours,
+  getMyTimeSheetDetails,
 } from "../../apis/TimeSheetapi";
-// import TimeSheetHistory from "../render/TimesheetHistory";
 import TimeSheetHistoryRender from "../render/TimeSheetHistoryRender";
 
 const TimeSheetHistoryFetch = () => {
@@ -12,12 +11,11 @@ const TimeSheetHistoryFetch = () => {
   const [timeSheetHistory, setTimeSheetHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showTimeSheet, setShowTimeSheet] = useState(false); // State for showing time sheet history
 
   useEffect(() => {
     const fetchTimeSheetHistory = async () => {
       try {
-        const history = await getEmployeeWorkingHours();
+        const history = await getMyTimeSheetDetails();
         if (Array.isArray(history)) {
           setTimeSheetHistory(history);
         } else {
@@ -41,12 +39,9 @@ const TimeSheetHistoryFetch = () => {
       setHours={setHours}
       date={date}
       setDate={setDate}
-      //   handleSubmit={handleSubmit}
       timeSheetHistory={timeSheetHistory}
       loading={loading}
       error={error}
-      showTimeSheet={showTimeSheet} // Pass down the state
-      //   handleShowTimeSheet={handleShowTimeSheet} // Pass down the toggle function
     />
   );
 };

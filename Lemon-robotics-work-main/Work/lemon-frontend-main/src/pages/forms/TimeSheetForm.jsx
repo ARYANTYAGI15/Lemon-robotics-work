@@ -10,18 +10,18 @@ const TimeSheetForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      hours: "",
-      date: "",
+      hours_worked: "",
+      task_description: "",
+      work_date: "",
     },
     validationSchema: Yup.object({
-      hours: Yup.string()
+      hours_worked: Yup.string()
         .required("Please enter the working hours")
-        .test("hours", "Please enter a valid number of hours", (value) => {
-          if (!value) return true;
-          const hours = Number(value);
-          return hours >= 0 && hours <= 24;
-        }),
-      date: Yup.string()
+        .matches(/^\d+$/, "Please enter a valid number of hours"),
+      task_description: Yup.string().required(
+        "Please enter a task description"
+      ),
+      work_date: Yup.string()
         .required("Please enter the date")
         .test("date", "Please enter a valid date", (value) => {
           if (!value) return true;
@@ -29,8 +29,9 @@ const TimeSheetForm = () => {
         }),
     }),
     onSubmit: async (values) => {
+      console.log(values);
       try {
-        const newEntry = await submitWorkingHours(values.hours, values.date);
+        const newEntry = await submitWorkingHours(values);
         setSuccessMessage("Time sheet submitted successfully!");
         setErrorMessage("");
       } catch (error) {
@@ -89,24 +90,48 @@ const TimeSheetForm = () => {
             <Grid item xs={12}>
               <TextField
                 label="Working Hours"
-                name="hours"
+                name="hours_worked"
+                type="number"
+                fullWidth
+                inputProps={{ ...formik.getFieldProps("hours_worked") }}
+                error={
+                  formik.touched.hours_worked &&
+                  Boolean(formik.errors.hours_worked)
+                }
+                helperText={
+                  formik.touched.hours_worked && formik.errors.hours_worked
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Task Description"
+                name="task_description"
                 type="text"
                 fullWidth
-                inputProps={{ ...formik.getFieldProps("hours") }}
-                error={formik.touched.hours && Boolean(formik.errors.hours)}
-                helperText={formik.touched.hours && formik.errors.hours}
+                inputProps={{ ...formik.getFieldProps("task_description") }}
+                error={
+                  formik.touched.task_description &&
+                  Boolean(formik.errors.task_description)
+                }
+                helperText={
+                  formik.touched.task_description &&
+                  formik.errors.task_description
+                }
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 label="Date"
                 type="date"
-                name="date"
+                name="work_date"
                 fullWidth
-                inputProps={{ ...formik.getFieldProps("date") }}
+                inputProps={{ ...formik.getFieldProps("work_date") }}
                 InputLabelProps={{ shrink: true }}
-                error={formik.touched.date && Boolean(formik.errors.date)}
-                helperText={formik.touched.date && formik.errors.date}
+                error={
+                  formik.touched.work_date && Boolean(formik.errors.work_date)
+                }
+                helperText={formik.touched.work_date && formik.errors.work_date}
               />
             </Grid>
             <Grid item xs={12}>

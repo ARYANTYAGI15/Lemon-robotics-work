@@ -11,20 +11,20 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-const groupTimeSheetsByMonth = (timeSheetHistory) => {
-  return timeSheetHistory.reduce((groups, timeSheet) => {
-    const date = new Date(timeSheet.work_date);
-    const monthYear = `${date.toLocaleString("default", {
-      month: "long",
-    })} ${date.getFullYear()}`;
+// const groupTimeSheetsByMonth = (timeSheetHistory) => {
+//   return timeSheetHistory.reduce((groups, timeSheet) => {
+//     const date = new Date(timeSheet.work_date);
+//     const monthYear = `${date.toLocaleString("default", {
+//       month: "long",
+//     })} ${date.getFullYear()}`;
 
-    if (!groups[monthYear]) {
-      groups[monthYear] = [];
-    }
-    groups[monthYear].push(timeSheet);
-    return groups;
-  }, {});
-};
+//     if (!groups[monthYear]) {
+//       groups[monthYear] = [];
+//     }
+//     groups[monthYear].push(timeSheet);
+//     return groups;
+//   }, {});
+// };
 
 const filterTimeSheetsByMonthYear = (timeSheetHistory, month, year) => {
   return timeSheetHistory.filter((timeSheet) => {
@@ -50,7 +50,7 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
   // Filtered time sheets based on the selected month and year
   const filteredTimeSheets = filterTimeSheetsByMonthYear(
     timeSheetHistory,
-    selectedMonth,
+    selectedMonth, // Subtract 1 to convert to zero-based index
     selectedYear
   );
 

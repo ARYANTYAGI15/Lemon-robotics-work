@@ -8,16 +8,16 @@ const TimeSheetWindow = () => {
     <>
       <Grid
         container
-        spacing={2}
+        spacing={4}
         sx={{
           display: "flex",
           backgroundImage:
             "url('https://cdn.photographylife.com/wp-content/uploads/2014/09/Nikon-D750-Image-Samples-2.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          flexDirection: "column",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "center",
-          maxWidth: { xs: "75%", sm: "500px" },
+          maxWidth: "100%",
           mt: 10,
           ml: 10,
           alignContent: {
@@ -26,10 +26,10 @@ const TimeSheetWindow = () => {
           },
         }}
       >
-        <Grid item>
+        <Grid item xs={4} sx={{ maxWidth: { xs: "75%", lg: "50%" } }}>
           <TimeSheetForm />
         </Grid>
-        <Grid item>
+        <Grid item xs={4} sx={{ maxWidth: { xs: "75%", lg: "50%" } }}>
           <TimeSheetHistoryFetch />
         </Grid>
       </Grid>

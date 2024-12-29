@@ -7,7 +7,6 @@ export { default as VirtualCommission } from "./ServiceDetailPages/VirtualCommis
 export { default as SoftwareTesting } from "./ServiceDetailPages/SoftwareTesting/SoftwareTesting";
 export { default as Login } from "./render/Login"; // Your existing Login export
 export { default as Dashboard } from "./render/Dashboard"; // Export Dashboard component
-export { default as TimeSheet } from "./fetch/TimeSheet"; // Export TimeSheet component
 export { default as EmployeeCard } from "./fetch/Employeecard";
 export { default as EmployeeCardRender } from "./render/EmployeeCardRender";
 export { default as EmployeeCardFetch } from "./fetch/EmployeeCardFetch";

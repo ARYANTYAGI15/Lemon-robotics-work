@@ -79,7 +79,6 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
 
   return (
     <>
-      {/* Time Sheet History */}
       <Grid
         container
         spacing={2}
@@ -159,10 +158,29 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
                     elevation={1}
                     sx={{ padding: 1, margin: 1, borderRadius: 2 }}
                   >
-                    <Typography variant="body1">
-                      <strong>Date:</strong> {item.work_date} <br />
-                      <strong>Hours Worked:</strong> {item.hours_worked}
-                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Grid container direction="column">
+                          <Grid item>
+                            <Typography variant="body1">
+                              <strong>Date:</strong> {item.work_date}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <Typography variant="body1">
+                              <strong>Hours Worked:</strong> {item.hours_worked}
+                            </Typography>
+                          </Grid>
+                          {/* Add more fields here */}
+                          <Grid item>
+                            <Typography variant="body1">
+                              <strong>Task Description:</strong>{" "}
+                              {item.task_description || "N/A"}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Paper>
                 ))}
             </Box>

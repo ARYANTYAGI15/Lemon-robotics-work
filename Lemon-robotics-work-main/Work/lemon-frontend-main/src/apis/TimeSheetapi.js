@@ -13,8 +13,7 @@ export const getMyTimeSheetDetails = async () => {
   }
 };
 
-// Post a new working hours log with task description
-export const submitWorkingHours = async (values) => {
+export const submitMyTimeSheetDetails = async (values) => {
   try {
     const response = await api.post("hr/timesheets/me/", {
       work_date: values.work_date,
@@ -33,6 +32,6 @@ export const submitWorkingHours = async (values) => {
 };
 
 export default {
-  submitWorkingHours, // Function to submit a new working hours log with description
+  submitMyTimeSheetDetails,
   getMyTimeSheetDetails,
 };

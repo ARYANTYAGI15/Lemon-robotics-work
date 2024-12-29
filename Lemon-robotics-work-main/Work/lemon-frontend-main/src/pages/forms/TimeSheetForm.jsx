@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Grid } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { submitWorkingHours } from "../../apis/TimeSheetapi";
+import { submitMyTimeSheetDetails } from "../../apis/TimeSheetapi";
 
 const TimeSheetForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
@@ -31,7 +31,7 @@ const TimeSheetForm = () => {
     onSubmit: async (values) => {
       console.log(values);
       try {
-        const newEntry = await submitWorkingHours(values);
+        const newEntry = await submitMyTimeSheetDetails(values);
         setSuccessMessage("Time sheet submitted successfully!");
         setErrorMessage("");
       } catch (error) {

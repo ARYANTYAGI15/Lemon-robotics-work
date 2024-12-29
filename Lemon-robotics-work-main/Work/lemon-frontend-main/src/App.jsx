@@ -10,12 +10,11 @@ import {
   VirtualCommission,
   SoftwareTesting,
   Login,
-  TimeSheet,
   EmployeeCardFetch,
   ExpenseSheetForm,
+  TimeSheetWindow,
 } from "./pages";
 import SideNav from "./components/SideNav/SideNav";
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
 
@@ -54,9 +53,10 @@ function App() {
         {/* Protected routes */}
         <Route path="/hr/employee" element={<EmployeeCardFetch />} />
         <Route path="/hr/expense-sheet" element={<ExpenseSheetForm />} />
-        <Route path="/hr/time-sheet" element={<TimeSheet />} />
+        {/* <Route path="/hr/time-sheet" element={<TimeSheet />} /> */}
+        <Route path="/hr/time-sheet" element={<TimeSheetWindow />} />
       </Routes>
-      <Footer />
+      {window.location.pathname.startsWith("/hr") ? null : <Footer />}
     </BrowserRouter>
   );
 }

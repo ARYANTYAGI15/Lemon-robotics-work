@@ -1,10 +1,6 @@
 from django.contrib import admin
 from . import models
 
-# Register your models here.
-
-# admin.site.register(models.Employee)
-
 
 @admin.register(models.Employee)
 class EmployeeAdmin(admin.ModelAdmin):
@@ -54,11 +50,17 @@ class LeaveAdmin(admin.ModelAdmin):
 class ExpenseAdmin(admin.ModelAdmin):
     list_select_related = ["employee"]
     list_display = [
+        "employee",
         "amount",
         "description",
         "date",
-        "employee",
+        "status",
+        "merchant",
+        "category",
+        "payment_mode",
     ]
+    list_filter = ["status", "category", "payment_mode"]
+    search_fields = ["employee__name", "merchant", "description"]
 
 
 @admin.register(models.EmployeeTimesheet)

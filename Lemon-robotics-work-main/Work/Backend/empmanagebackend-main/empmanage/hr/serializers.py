@@ -185,7 +185,8 @@ class CreateEmployeeLeaveSerializer(serializers.ModelSerializer):
 
 from rest_framework import serializers
 
-class EmployeeExpenseSerializer(serializers.ModelSerializer):
+
+class SimpleEmployeeExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeExpense
         fields = [
@@ -196,10 +197,62 @@ class EmployeeExpenseSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["employee"]  # Employee will be set automatically
 
+    # def create(self, validated_data):
+    #     # Retrieve the employee_id from the serializer context
+    #     employee_id = self.context.get("employee_id")
+
+    #     if not employee_id:
+    #         raise serializers.ValidationError("Employee ID cannot be null.")
+
+    #     # Ensure employee exists
+    #     try:
+    #         employee = Employee.objects.get(id=employee_id)
+    #     except Employee.DoesNotExist:
+    #         raise serializers.ValidationError("Employee not found.")
+
+    #     # Assign the employee to validated data
+    #     validated_data["employee"] = employee
+
+    #     # Create and return the new Expense instance
+    #     expense = EmployeeExpense.objects.create(**validated_data)
+    #     return expense
+
+
+class EmployeeExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeExpense
+        fields = [
+            "id",
+            "amount",
+            "description",
+            "date",
+            "status",
+            "merchant",
+            "category",
+            "payment_mode",
+            "document",
+        ]
+
+
+class CreateEmployeeExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeExpense
+        fields = [
+            "id",
+            "amount",
+            "description",
+            "date",
+            "status",
+            "merchant",
+            "category",
+            "payment_mode",
+            "document",
+        ]
+
     def create(self, validated_data):
         # Retrieve the employee_id from the serializer context
         employee_id = self.context.get("employee_id")
-        
+
         if not employee_id:
             raise serializers.ValidationError("Employee ID cannot be null.")
 
@@ -217,23 +270,22 @@ class EmployeeExpenseSerializer(serializers.ModelSerializer):
         return expense
 
 
-
 # Timesheet serializer
 class EmployeeTimesheetSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeTimesheet
         fields = [
-            "id",              # Return the ID of the created timesheet
-            "work_date",       # Date field for the timesheet
-            "hours_worked",    # Number of hours worked
-            "task_description",     # Description field for tasks
+            "id",  # Return the ID of the created timesheet
+            "work_date",  # Date field for the timesheet
+            "hours_worked",  # Number of hours worked
+            "task_description",  # Description field for tasks
         ]
         read_only_fields = ["employee"]  # Employee will be set automatically
 
     def create(self, validated_data):
         # Retrieve the employee_id from the serializer context
         employee_id = self.context.get("employee_id")
-        
+
         if not employee_id:
             raise serializers.ValidationError("Employee ID cannot be null.")
 

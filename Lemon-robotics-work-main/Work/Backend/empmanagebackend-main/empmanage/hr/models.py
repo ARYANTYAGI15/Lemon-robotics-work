@@ -208,10 +208,50 @@ class EmployeeLeave(models.Model):
 
 
 class EmployeeExpense(models.Model):
+    STATUS_CHOICES = [
+        ("awaiting_approval", "Awaiting Approval"),
+        ("recalled", "Recalled"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+
+    CATEGORY_CHOICES = [
+        ("travel", "Travel"),
+        ("food", "Food"),
+        ("accommodation", "Accommodation"),
+        ("entertainment", "Entertainment"),
+        ("office_supplies", "Office Supplies"),
+        ("transportation", "Transportation"),
+        ("utilities", "Utilities"),
+        ("medical", "Medical"),
+        ("training", "Training"),
+        ("miscellaneous", "Miscellaneous"),
+    ]
+
+    PAYMENT_MODE_CHOICES = [
+        ("upi", "UPI"),
+        ("cash", "Cash"),
+        ("card", "Card"),
+    ]
+
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     date = models.DateField()
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="awaiting_approval"
+    )
+    merchant = models.CharField(max_length=100, default="any")
+    category = models.CharField(
+        max_length=20, choices=CATEGORY_CHOICES, default="miscellaneous"
+    )
+    document = models.FileField(upload_to="documents/", null=True, blank=True)
+    payment_mode = models.CharField(
+        max_length=10, choices=PAYMENT_MODE_CHOICES, default="cash"
+    )
+
+    def __str__(self):
+        return f"{self.employee} - {self.amount} - {self.status}"
 
 
 class EmployeeTimesheet(models.Model):
@@ -219,7 +259,6 @@ class EmployeeTimesheet(models.Model):
     work_date = models.DateField()
     hours_worked = models.DecimalField(max_digits=5, decimal_places=2)
     task_description = models.TextField()
-    
 
 
 # Sick Leave=7 leaves (Jan-dec)

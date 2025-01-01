@@ -1,8 +1,10 @@
 import api from "./myaxios"; // Import your axios instance
 
-export const getMyTimeSheetDetails = async () => {
+export const getMyTimeSheetDetails = async (month, year) => {
   try {
-    const response = await api.get("hr/timesheets/me/"); // Corrected endpoint
+    const response = await api.get("hr/timesheets/me/", {
+      params: { month, year },
+    });
     return response.data;
   } catch (error) {
     console.error(

@@ -9,62 +9,19 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
-// const groupTimeSheetsByMonth = (timeSheetHistory) => {
-//   return timeSheetHistory.reduce((groups, timeSheet) => {
-//     const date = new Date(timeSheet.work_date);
-//     const monthYear = `${date.toLocaleString("default", {
-//       month: "long",
-//     })} ${date.getFullYear()}`;
-
-//     if (!groups[monthYear]) {
-//       groups[monthYear] = [];
-//     }
-//     groups[monthYear].push(timeSheet);
-//     return groups;
-//   }, {});
-// };
-
-const filterTimeSheetsByMonthYear = (timeSheetHistory, month, year) => {
-  return timeSheetHistory.filter((timeSheet) => {
-    const date = new Date(timeSheet.work_date);
-    console.log(
-      "Date:",
-      date,
-      "Month:",
-      date.getMonth(),
-      "Year:",
-      date.getFullYear()
-    );
-    return date.getMonth() === month && date.getFullYear() === year;
-  });
-};
-
-const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  // Filtered time sheets based on the selected month and year
-  const filteredTimeSheets = filterTimeSheetsByMonthYear(
-    timeSheetHistory,
-    selectedMonth, // Subtract 1 to convert to zero-based index
-    selectedYear
-  );
-
-  // Default years if timeSheetHistory is empty
-  const years = Array.from(
-    new Set(
-      timeSheetHistory.length > 0
-        ? timeSheetHistory.map((timeSheet) =>
-            new Date(timeSheet.work_date).getFullYear()
-          )
-        : [new Date().getFullYear()]
-    )
-  );
-
+const TimeSheetHistoryRender = ({
+  timeSheetHistory,
+  selectedMonth,
+  setSelectedMonth,
+  selectedYear,
+  setSelectedYear,
+  page,
+  setPage,
+  rowsPerPage,
+  setRowsPerPage,
+}) => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -74,8 +31,10 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
     setPage(0);
   };
 
-  console.log("Time Sheet History:", timeSheetHistory);
-  console.log("Filtered Time Sheets:", filteredTimeSheets);
+  // Get the current year
+  const currentYear = new Date().getFullYear();
+  // Create an array with the current year and the previous year
+  const years = [currentYear - 1, currentYear];
 
   return (
     <>
@@ -138,7 +97,7 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
           </FormControl>
         </Grid>
 
-        {filteredTimeSheets.length === 0 ? (
+        {timeSheetHistory.length === 0 ? (
           <Grid item xs={12}>
             <Typography
               variant="body1"
@@ -150,7 +109,7 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
         ) : (
           <Grid item xs={12}>
             <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
-              {filteredTimeSheets
+              {timeSheetHistory
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((item, index) => (
                   <Paper
@@ -187,7 +146,7 @@ const TimeSheetHistoryRender = ({ timeSheetHistory }) => {
             {/* Table Pagination */}
             <TablePagination
               component="div"
-              count={filteredTimeSheets.length}
+              count={timeSheetHistory.length}
               page={page}
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}

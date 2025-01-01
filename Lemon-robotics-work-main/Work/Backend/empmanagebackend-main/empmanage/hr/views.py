@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import EmployeeTimesheetFilter
+from .filters import EmployeeTimesheetFilter, EmployeeExpenseFilter
 from .models import (
     Employee,
     EmployeeAttendance,
@@ -146,6 +146,8 @@ class EmployeeExpenseViewSet(ModelViewSet):
     queryset = EmployeeExpense.objects.select_related("employee").all()
 
     permission_classes = [IsAuthenticated]
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = EmployeeExpenseFilter
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -178,7 +180,10 @@ class EmployeeExpenseViewSet(ModelViewSet):
         try:
             if request.method == "GET":
                 expenses = EmployeeExpense.objects.filter(employee=self.employee)
-                serializer = SimpleEmployeeExpenseSerializer(expenses, many=True)
+                filtered_expenses = self.filter_queryset(expenses)
+                serializer = SimpleEmployeeExpenseSerializer(
+                    filtered_expenses, many=True
+                )
                 return Response(serializer.data)
 
             elif request.method == "POST":
@@ -234,7 +239,8 @@ class EmployeeTimesheetViewSet(ModelViewSet):
             if request.method == "GET":
                 # Retrieve timesheets for the employee
                 timesheets = EmployeeTimesheet.objects.filter(employee=employee)
-                serializer = self.get_serializer(timesheets, many=True)
+                filtered_timesheets = self.filter_queryset(timesheets)
+                serializer = self.get_serializer(filtered_timesheets, many=True)
                 return Response(serializer.data)
 
             elif request.method == "POST":

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
-  TextField,
   Typography,
   Paper,
   Grid,
@@ -14,24 +12,14 @@ import {
 } from "@mui/material";
 
 // Utility function to filter expenses by month and year
-const filterExpensesByMonthYear = (expenses, month, year) => {
-  return expenses.filter((expense) => {
+const filterExpensesByMonthYear = (expenseHistory, month, year) => {
+  return expenseHistory.filter((expense) => {
     const date = new Date(expense.date);
     return date.getMonth() === month && date.getFullYear() === year;
   });
 };
 
-const ExpenseSheetRender = ({
-  expense,
-  description,
-  setExpense,
-  setDescription,
-  handleSubmit,
-  expenseHistory,
-  showConfirmation,
-  handleShowExpenseSheet,
-  showExpenseSheet,
-}) => {
+const ExpenseSheetRender = ({ expenseHistory }) => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [page, setPage] = useState(0);
@@ -44,7 +32,14 @@ const ExpenseSheetRender = ({
     selectedYear
   );
 
-  // Handle pagination changes
+  // Extract unique years from the expense history
+  const years = Array.from(
+    new Set(
+      expenseHistory.map((expense) => new Date(expense.date).getFullYear())
+    )
+  );
+
+  // Pagination handlers
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -55,197 +50,106 @@ const ExpenseSheetRender = ({
   };
 
   return (
-    <Box
+    <Grid
+      container
+      spacing={2}
       sx={{
         display: "flex",
-        flexDirection: "row",
+        mb: 4,
         justifyContent: "center",
-        alignItems: "flex-start",
-        height: "100vh",
-        padding: 2,
-        marginTop: "60px",
-        backgroundColor: "#e0f7fa",
-        overflow: "hidden",
+        alignItems: "center",
+        padding: 4,
+        borderRadius: 2,
+        backgroundColor: "#ffffff",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <Paper
-        elevation={3}
-        sx={{
-          padding: 4,
-          borderRadius: 2,
-          width: "45%",
-          backgroundColor: "#ffffff",
-          mr: 2,
-        }}
-      >
+      <Grid item xs={12}>
         <Typography
           variant="h4"
           sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
         >
-          Add Expense
+          My Expense Sheet
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="Expense Amount"
-                type="number"
-                value={expense}
-                onChange={(e) => setExpense(e.target.value)}
-                fullWidth
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                fullWidth
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-                sx={{
-                  height: "56px",
-                  "&:hover": {
-                    backgroundColor: "#004ba0",
-                  },
-                }}
-              >
-                Submit Expense
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
+      </Grid>
 
-        {showConfirmation && (
-          <Typography
-            variant="h6"
-            sx={{ mt: 2, textAlign: "center", color: "green" }}
+      {/* Month and Year Selection */}
+      <Grid item xs={12} sm={6}>
+        <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+          <InputLabel>Month</InputLabel>
+          <Select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            label="Month"
           >
-            Expense added successfully!
-          </Typography>
-        )}
-
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{ mt: 3 }}
-          onClick={handleShowExpenseSheet}
-        >
-          {showExpenseSheet ? "Hide My Expense Sheet" : "Show My Expense Sheet"}
-        </Button>
-      </Paper>
-
-      {/* Expense Sheet History */}
-      {showExpenseSheet && (
-        <Paper
-          elevation={3}
-          sx={{
-            padding: 4,
-            borderRadius: 2,
-            width: "45%",
-            backgroundColor: "#ffffff",
-            ml: 2,
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{ mb: 3, textAlign: "center", color: "#1976d2" }}
+            {Array.from({ length: 12 }, (_, i) => (
+              <MenuItem key={i} value={i}>
+                {new Date(0, i).toLocaleString("default", {
+                  month: "long",
+                })}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+          <InputLabel>Year</InputLabel>
+          <Select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            label="Year"
           >
-            My Expense Sheet
-          </Typography>
+            {years.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
 
-          {/* Month and Year Selection */}
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel>Month</InputLabel>
-              <Select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                label="Month"
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <MenuItem key={i} value={i}>
-                    {new Date(0, i).toLocaleString("default", {
-                      month: "long",
-                    })}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel>Year</InputLabel>
-              <Select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                label="Year"
-              >
-                {Array.from(
-                  new Set(
-                    expenseHistory.map((expense) =>
-                      new Date(expense.date).getFullYear()
-                    )
-                  )
-                ).map((year) => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+      {filteredExpenses.length === 0 ? (
+        <Grid item xs={12}>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", color: "#555" }}
+          >
+            No expenses recorded for this month.
+          </Typography>
+        </Grid>
+      ) : (
+        <Grid item xs={12}>
+          <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
+            {filteredExpenses
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((expense, index) => (
+                <Paper
+                  key={index}
+                  elevation={1}
+                  sx={{ padding: 1, margin: 1, borderRadius: 2 }}
+                >
+                  <Typography variant="body1">
+                    <strong>Date:</strong> {expense.date} <br />
+                    <strong>Amount:</strong> ${expense.amount} <br />
+                    <strong>Description:</strong> {expense.description}
+                  </Typography>
+                </Paper>
+              ))}
           </Box>
-
-          {filteredExpenses.length === 0 ? (
-            <Typography
-              variant="body1"
-              sx={{ textAlign: "center", color: "#555" }}
-            >
-              No expenses recorded for this month.
-            </Typography>
-          ) : (
-            <>
-              <Box sx={{ mt: 2, maxHeight: "400px", overflowY: "auto" }}>
-                {filteredExpenses
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((item, index) => (
-                    <Paper
-                      key={index}
-                      elevation={1}
-                      sx={{ padding: 1, margin: 1, borderRadius: 2 }}
-                    >
-                      <Typography variant="body1">
-                        <strong>Date:</strong> {item.date} <br />
-                        <strong>Amount:</strong> ${item.amount} <br />
-                        <strong>Description:</strong> {item.description}
-                      </Typography>
-                    </Paper>
-                  ))}
-              </Box>
-
-              {/* Table Pagination */}
-              <TablePagination
-                component="div"
-                count={filteredExpenses.length}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                rowsPerPageOptions={[5, 10, 25]}
-              />
-            </>
-          )}
-        </Paper>
+          {/* Table Pagination */}
+          <TablePagination
+            component="div"
+            count={filteredExpenses.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 };
 

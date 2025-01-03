@@ -13,6 +13,7 @@ import {
   EmployeeCardFetch,
   ExpenseSheetForm,
   TimeSheetWindow,
+  ExpenseSheetWindow
 } from "./pages";
 import SideNav from "./components/SideNav/SideNav";
 function App() {
@@ -52,7 +53,7 @@ function App() {
 
         {/* Protected routes */}
         <Route path="/hr/employee" element={<EmployeeCardFetch />} />
-        <Route path="/hr/expense-sheet" element={<ExpenseSheetForm />} />
+        <Route path="/hr/expense-sheet" element={<ExpenseSheetWindow />} />
         {/* <Route path="/hr/time-sheet" element={<TimeSheet />} /> */}
         <Route path="/hr/time-sheet" element={<TimeSheetWindow />} />
       </Routes>

@@ -130,6 +130,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "employeemanage",  # Database name
+        #"HOST":"localhost",       # Uncomment it for starting server on your local machine without docker with python command
         "HOST": "database",        # Host is the name of the MySQL service in your docker-compose.yml
         "PORT": "3306",            # Port on which the MySQL service is accessible from the host
         "USER": "root",            # MySQL username
